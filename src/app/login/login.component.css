@@ -1,0 +1,10 @@
+form {
+  height: calc(100vh - 109.6px);
+}
+
+input,
+p-button > button {
+  width: 15rem;
+}
+
+/*# sourceMappingURL=login.component.css.map */

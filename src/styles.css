@@ -1,13 +1,14 @@
 @import "primeng/resources/themes/lara-dark-teal/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
-
-*{
+* {
   padding: 0px;
   margin: 0px;
 }
 
 body {
   font-family: var(--font-family);
-  background: #071426
+  background: #071426;
 }
+
+/*# sourceMappingURL=styles.css.map */

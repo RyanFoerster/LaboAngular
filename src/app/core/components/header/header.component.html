@@ -1,0 +1,8 @@
+<div class="card flex justify-content-between align-items-center">
+  <div>
+    <button type="button" pButton icon="pi pi-bars" (click)="menu.toggle($event)"></button>
+    <p-slideMenu #menu [model]="slideMenuItems" [popup]="true" [viewportHeight]="250" [menuWidth]="175"></p-slideMenu>
+  </div>
+  <h1>Tournament gestion</h1>
+  <p-tabMenu [model]="menuItems" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)"></p-tabMenu>
+</div>
