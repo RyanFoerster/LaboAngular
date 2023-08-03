@@ -1,32 +1,41 @@
-<div *ngIf="tournamentsSub$ | async">
-  <h1 [ngClass]="{}" *ngFor="let tournament of tournaments">{{tournament.name}}</h1>
-</div>
-<div *ngIf="isLoggedIn">
-    <p>{{user?.username}}</p>
-</div>
-<div *ngIf="!isLoggedIn">
-    <p>Non connecté</p>
-</div>
+<div class="flex">
+    <div class="flex flex-column w-5 p-5">
+        <p class="mb-5"> Bienvenue sur notre site d'échecs ! </p>
 
-<form [formGroup]="loginForm" class="flex justify-content-center align-items-center flex-column" (ngSubmit)="onLogin()">
-    <div>
-        <span class="p-float-label ng-invalid">
-            <input pInputText id="username" formControlName="username" aria-describedby="username-help"/>
-            <label for="username">Username</label>
-        </span>
-        <small *ngIf="loginForm.get('username')?.errors?.['required'] && loginForm.get('username')?.touched" id="username-help" class="p-error">Username is not available.</small>
+        <p class="mb-5"> Que vous soyez un joueur débutant ou un maître chevronné, vous êtes au bon endroit pour
+            améliorer vos
+            compétences, relever des défis et découvrir la beauté du jeu d'échecs.</p>
+
+        <p class="mb-5">Pour les débutants, nous proposons des leçons interactives pour apprendre les règles du jeu, les
+            mouvements des
+            pièces, les stratégies de base et des conseils utiles pour progresser rapidement.</p>
+
+        <p class="mb-5">Si vous cherchez à perfectionner votre jeu, nous avons des cours avancés animés par des joueurs
+            expérimentés qui
+            partageront leurs connaissances et leurs tactiques gagnantes.</p>
+
+        <p class="mb-5">Les passionnés de compétition seront ravis de participer à nos tournois en ligne. Affrontez des
+            adversaires du monde
+            entier et montrez vos talents échiquéens.</p>
+
+        <p class="mb-5">Pour les joueurs sociaux, nous vous invitons à rejoindre notre communauté. Échangez des astuces,
+            partagez vos
+            parties préférées et discutez avec d'autres passionnés d'échecs.</p>
+
+        <p class="mb-5">Nous croyons que le jeu d'échecs est bien plus qu'un simple passe-temps. C'est un moyen de
+            développer votre esprit
+            stratégique, de renforcer votre concentration et d'apprécier l'art du mouvement.</p>
+
+        <p class="mb-5">Alors, qu'attendez-vous ? Plongez dans le monde fascinant des échecs et commencez votre aventure
+            dès aujourd'hui !</p>
+
+        <p class="mb-5">Que le meilleur joueur gagne !</p>
+
+        <p class="mb-5">L'équipe du site d'échecs</p>
+
     </div>
-
-    <div class="flex">
-        <span class="p-float-label ng-dirty ng-invalid">
-        <p-password [feedback]="true" formControlName="password" [toggleMask]="true"/>
-        <label>Password</label>
-        </span>
-        <p-message severity="error" text="Ce champs est requis"
-                   *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched"></p-message>
+    <div class="flex justify-content-center align-items-center">
+        <img src="./assets/images/chess.gif" alt="" class="h-25rem">
     </div>
-
-    <p-button type="submit" label="Se connecter" styleClass="p-button-rounded" [loading]="loading" (click)="load()"></p-button>
-
-</form>
+</div>
 

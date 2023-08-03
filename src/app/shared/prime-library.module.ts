@@ -8,12 +8,17 @@ import {PasswordModule} from "primeng/password";
 import {FieldsetModule} from "primeng/fieldset";
 import {MessageModule} from "primeng/message";
 import {RippleModule} from "primeng/ripple";
+import {TableModule} from "primeng/table";
+import {MegaMenuModule} from "primeng/megamenu";
+import {DropdownModule} from "primeng/dropdown";
+import {MultiSelectModule} from "primeng/multiselect";
+import {InputSwitchModule} from "primeng/inputswitch";
 
 
 @NgModule({
     declarations: [],
     imports: [
-        CommonModule
+        CommonModule,
     ],
     exports: [
         TabMenuModule,
@@ -23,8 +28,13 @@ import {RippleModule} from "primeng/ripple";
         PasswordModule,
         FieldsetModule,
         MessageModule,
-        RippleModule
-    ]
+        RippleModule,
+        TableModule,
+        MegaMenuModule,
+        DropdownModule,
+        MultiSelectModule,
+        InputSwitchModule
+    ],
 })
 export class PrimeLibraryModule {
 }

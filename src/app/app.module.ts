@@ -9,6 +9,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SharedModule} from "./shared/shared.module";
 import {HttpClientModule} from "@angular/common/http";
 import {LoginComponent} from './login/login.component';
+import {TournamentModule} from "./tournament/tournament.module";
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import {LoginComponent} from './login/login.component';
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
-        HttpClientModule
+        HttpClientModule,
+        TournamentModule
     ],
     providers: [],
     bootstrap: [AppComponent]

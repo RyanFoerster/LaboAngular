@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {HttpClientModule} from "@angular/common/http";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {PrimeLibraryModule} from "./prime-library.module";
 import {AuthService} from "./services/auth.service";
 
@@ -14,7 +12,8 @@ import {AuthService} from "./services/auth.service";
     ],
     exports: [
         ReactiveFormsModule,
-        PrimeLibraryModule
+        PrimeLibraryModule,
+        FormsModule
     ],
     providers: [
         AuthService

@@ -9,8 +9,8 @@
 
     <div class="flex">
         <span class="p-float-label ng-dirty ng-invalid">
-        <p-password [feedback]="true" formControlName="password" [toggleMask]="true"/>
-        <label>Password</label>
+            <p-password [feedback]="true" formControlName="password" [toggleMask]="true"/>
+            <label>Password</label>
         </span>
         <p-message severity="error" text="Ce champs est requis"
                    *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched"></p-message>

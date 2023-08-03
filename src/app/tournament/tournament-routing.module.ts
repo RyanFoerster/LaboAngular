@@ -1,11 +1,11 @@
 import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
-import {HomeComponent} from "./components/home.component";
+import {TournamentIndexComponent} from "./components/tournament-index/tournament-index.component";
 
 const routes: Routes = [
     {
         path: '',
-        component: HomeComponent
+        component: TournamentIndexComponent
     }
 ];
 
@@ -13,5 +13,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class HomeRoutingModule {
+export class TournamentRoutingModule {
 }
