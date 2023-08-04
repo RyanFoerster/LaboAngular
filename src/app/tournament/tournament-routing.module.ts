@@ -2,6 +2,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
 import {TournamentIndexComponent} from "./components/tournament-index/tournament-index.component";
 import {TournamentDetailsComponent} from "./components/tournament-details/tournament-details.component";
+import {TournamentAddComponent} from "./components/tournament-add/tournament-add.component";
 
 const routes: Routes = [
     {
@@ -11,6 +12,10 @@ const routes: Routes = [
     {
         path: 'details/:id',
         component: TournamentDetailsComponent
+    },
+    {
+        path: 'add',
+        component: TournamentAddComponent
     }
 ];
 

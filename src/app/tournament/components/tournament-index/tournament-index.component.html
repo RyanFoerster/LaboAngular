@@ -1,3 +1,7 @@
+<div class="mt-3">
+    <p-button class="p-5" routerLink="/tournament/add"  *ngIf="user?.role === 'Admin'">Nouveau</p-button>
+</div>
+
 <div class="p-5 bg-gray-800 m-5">
     <button
         class="mb-5 border-none bg-primary border-1 border-black-alpha-80 border-round-md p-1 cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"

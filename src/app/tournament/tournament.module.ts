@@ -6,12 +6,14 @@ import {PrimeLibraryModule} from "../shared/prime-library.module";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import { TournamentDetailsComponent } from './components/tournament-details/tournament-details.component';
+import { TournamentAddComponent } from './components/tournament-add/tournament-add.component';
 
 
 @NgModule({
     declarations: [
         TournamentIndexComponent,
-        TournamentDetailsComponent
+        TournamentDetailsComponent,
+        TournamentAddComponent
     ],
     imports: [
         CommonModule,

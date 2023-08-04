@@ -19,6 +19,7 @@ import {PanelModule} from "primeng/panel";
 import {StepsModule} from "primeng/steps";
 import {ToastModule} from "primeng/toast";
 import {CardModule} from "primeng/card";
+import {SpinnerModule} from "primeng/spinner";
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import {CardModule} from "primeng/card";
         PanelModule,
         StepsModule,
         ToastModule,
-        CardModule
+        CardModule,
+        SpinnerModule
     ],
 })
 export class PrimeLibraryModule {

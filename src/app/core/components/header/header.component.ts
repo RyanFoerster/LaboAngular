@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MenuItem} from "primeng/api";
 import {SessionService} from "../../../services/session.service";
 
@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
 
     slideMenuItems: MenuItem[] | undefined;
     activeItem: MenuItem | undefined;
+    refreshNeeded = false;
 
     logMenuItems = {
         signIn:  {
@@ -33,12 +34,13 @@ export class HeaderComponent implements OnInit {
     ngOnInit() {
 
         this._sessionServ.getTokenObservable().subscribe((token) => {
-            if(token) {
-                this.menuItems.push(this.logMenuItems.signOut)
-            }
-            else {
-                this.menuItems.push(this.logMenuItems.signIn)
-            }
+            this.refreshNeeded = true;
+
+            this.menuItems.splice(2,1)
+            this.menuItems.push(token ? this.logMenuItems.signOut : this.logMenuItems.signIn)
+
+            setTimeout(() => this.refreshNeeded = false, 100)
+
         })
 
         this.activeItem = this.menuItems[0];

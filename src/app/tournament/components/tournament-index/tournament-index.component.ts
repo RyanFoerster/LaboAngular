@@ -6,6 +6,8 @@ import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
 import {TournamentIndex} from "../../../shared/models/TournamentIndex";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {SessionService} from "../../../services/session.service";
+import {User} from "../../../shared/models/User";
 
 @Component({
   selector: 'app-tournament-index',
@@ -22,8 +24,11 @@ export class TournamentIndexComponent implements OnInit{
     searchForm: FormGroup
     showSearchForm!: boolean;
 
+    user?: User
+
     constructor(private _tournamentService: TournamentService,
-                private _formBuilder: FormBuilder) {
+                private _formBuilder: FormBuilder,
+                private _sessionService: SessionService) {
 
         this.searchForm = this._formBuilder.group({
             name: [null],
@@ -35,6 +40,10 @@ export class TournamentIndexComponent implements OnInit{
     }
 
     ngOnInit() {
+
+        if (this._sessionService.getToken()) {
+            this.user = this._sessionService.getToken()?.user
+        }
 
         this.tournamentsSub$ = this._tournamentService.getTournaments({
             offset: undefined,
