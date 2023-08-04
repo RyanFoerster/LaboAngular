@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem} from "primeng/api";
+import {SessionService} from "../../../services/session.service";
 
 @Component({
     selector: 'app-header',
@@ -7,22 +8,63 @@ import {MenuItem} from "primeng/api";
     styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-    menuItems: MenuItem[] | undefined;
+    menuItems: MenuItem[]= [
+        {icon: "pi pi-home", routerLink: "/home"},
+        {icon: "pi pi-user"},
+
+
+    ];
     slideMenuItems: MenuItem[] | undefined;
     activeItem: MenuItem | undefined;
 
+    logMenuItems = {
+        signIn:  {
+            icon: "pi pi-sign-in",
+            routerLink: "/login"
+        },
+        signOut: {
+            icon: "pi pi-sign-out",
+            command: () => this.onLogout()
+        }
+    }
 
-    constructor() {
+
+    constructor(private sessionServ: SessionService) {
     }
 
     ngOnInit() {
 
-        this.menuItems = [
-            {icon: "pi pi-home", routerLink: "/home"},
-            {icon: "pi pi-user"},
-            {icon: "pi pi-sign-in", routerLink: "/login"}
+        this.sessionServ.getTokenObservable().subscribe((token) => {
+            this.menuItems.splice(2, 1)
+            if(token) {
+                this.menuItems.push(this.logMenuItems.signOut)
+            }
+            else {
+                this.menuItems.push(this.logMenuItems.signIn)
+            }
+            this.menuItems = [...this.menuItems]
+        })
 
-        ];
+        // this.menuItems = [
+        //     {icon: "pi pi-home", routerLink: "/home"},
+        //     {icon: "pi pi-user"},
+        //
+        //
+        // ];
+
+        // if(!sessionStorage.getItem("token")){
+        //     this.menuItems.push({
+        //         icon: "pi pi-sign-in",
+        //         routerLink: "/login"
+        //     })
+        // }else{
+        //     this.menuItems.push({
+        //         icon: "pi pi-sign-out",
+        //         routerLink: "/login",
+        //         command: () => this.onLogout()
+        //     })
+        // }
+
 
         this.activeItem = this.menuItems[0];
 
@@ -34,5 +76,9 @@ export class HeaderComponent implements OnInit {
 
     onActiveItemChange(event: MenuItem) {
         this.activeItem = event
+    }
+
+    onLogout(){
+        this.sessionServ.removeFromSession()
     }
 }

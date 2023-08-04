@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Tournament} from "../../../shared/models/Tournament";
 import {TournamentService} from "../../../shared/services/tournament.service";
-import {Observable, tap} from "rxjs";
+import {delay, Observable, tap} from "rxjs";
 import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
 import {TournamentIndex} from "../../../shared/models/TournamentIndex";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
@@ -15,9 +15,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class TournamentIndexComponent implements OnInit{
 
     tournamentsSub$?: Observable<TournamentIndex>
-    tournaments: Tournament[] | undefined = []
     tournamentCategories = this.enumToDropdownOptions(TournamentCategory);
     tournamentStatus = this.enumToDropdownOptions(TournamentStatus)
+    showSpinner: boolean = false
 
     searchForm: FormGroup
     showSearchForm!: boolean;
@@ -40,7 +40,7 @@ export class TournamentIndexComponent implements OnInit{
             offset: undefined,
             name: undefined,
             category: undefined,
-            status: undefined,
+            status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
             womenOnly: undefined
         })
     }
@@ -69,9 +69,9 @@ export class TournamentIndexComponent implements OnInit{
             status: selectedStatus,
             womenOnly
         }).pipe(
-            tap(data =>{
-                this.tournaments = data.results
-            } )
+            tap(() => this.showSpinner = true),
+            delay(1000),
+            tap(() => this.showSpinner = false)
         )
     }
 

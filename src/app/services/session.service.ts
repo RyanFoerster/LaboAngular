@@ -8,22 +8,20 @@ import {Token} from "../shared/models/Token";
 export class SessionService {
 
     private _token: string = ""
-    private _tokenSubject = new BehaviorSubject<Token | null>(null)
+    private _tokenSubject: BehaviorSubject<Token | null>
 
     constructor() {
         const tokenFromSession = sessionStorage.getItem(this._token)
-        if(tokenFromSession){
-            this._tokenSubject.next(JSON.parse(tokenFromSession))
-        }
+        this._tokenSubject = new BehaviorSubject<Token | null>(tokenFromSession ? JSON.parse(tokenFromSession) : null)
     }
 
     addToSession(token: Token) {
-        sessionStorage.setItem(this._token, JSON.stringify(token));
+        sessionStorage.setItem("token", JSON.stringify(token));
         this._tokenSubject.next(token);
     }
 
     removeFromSession(): void {
-        sessionStorage.removeItem(this._token);
+        sessionStorage.removeItem("token");
         this._tokenSubject.next(null);
     }
 
@@ -33,7 +31,6 @@ export class SessionService {
     }
 
     getToken(): Token | null {
-        console.log( "Session service" + this._token)
         return this._tokenSubject.getValue();
     }
 

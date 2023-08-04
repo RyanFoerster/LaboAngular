@@ -13,6 +13,12 @@ import {MegaMenuModule} from "primeng/megamenu";
 import {DropdownModule} from "primeng/dropdown";
 import {MultiSelectModule} from "primeng/multiselect";
 import {InputSwitchModule} from "primeng/inputswitch";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {PaginatorModule} from "primeng/paginator";
+import {PanelModule} from "primeng/panel";
+import {StepsModule} from "primeng/steps";
+import {ToastModule} from "primeng/toast";
+import {CardModule} from "primeng/card";
 
 
 @NgModule({
@@ -33,7 +39,13 @@ import {InputSwitchModule} from "primeng/inputswitch";
         MegaMenuModule,
         DropdownModule,
         MultiSelectModule,
-        InputSwitchModule
+        InputSwitchModule,
+        ProgressSpinnerModule,
+        PaginatorModule,
+        PanelModule,
+        StepsModule,
+        ToastModule,
+        CardModule
     ],
 })
 export class PrimeLibraryModule {

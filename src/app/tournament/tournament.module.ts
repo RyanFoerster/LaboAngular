@@ -5,11 +5,13 @@ import {TournamentRoutingModule} from "./tournament-routing.module";
 import {PrimeLibraryModule} from "../shared/prime-library.module";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
+import { TournamentDetailsComponent } from './components/tournament-details/tournament-details.component';
 
 
 @NgModule({
     declarations: [
-        TournamentIndexComponent
+        TournamentIndexComponent,
+        TournamentDetailsComponent
     ],
     imports: [
         CommonModule,

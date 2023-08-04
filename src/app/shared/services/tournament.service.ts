@@ -5,6 +5,7 @@ import {Tournament} from "../models/Tournament";
 import {environments} from "../../../environments/environments";
 import {TournamentIndex} from "../models/TournamentIndex";
 import {TournamentCategory} from "../enums/TournamentCategory";
+import {TournamentDetails} from "../models/TournamentDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,9 @@ export class TournamentService {
             `${environments.apiUrl}/Tournament`,
             { params: httpParams }
         );
+    }
+
+    getOneTournament(id: string): Observable<TournamentDetails>{
+      return this._httpClient.get<TournamentDetails>(`${environments.apiUrl}/Tournament/${id}`)
     }
 }
