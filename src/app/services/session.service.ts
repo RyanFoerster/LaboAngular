@@ -7,11 +7,10 @@ import {Token} from "../shared/models/Token";
 })
 export class SessionService {
 
-    private _token: string = ""
     private _tokenSubject: BehaviorSubject<Token | null>
 
     constructor() {
-        const tokenFromSession = sessionStorage.getItem(this._token)
+        const tokenFromSession = sessionStorage.getItem("token")
         this._tokenSubject = new BehaviorSubject<Token | null>(tokenFromSession ? JSON.parse(tokenFromSession) : null)
     }
 

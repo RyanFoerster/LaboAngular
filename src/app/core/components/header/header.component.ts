@@ -11,9 +11,8 @@ export class HeaderComponent implements OnInit {
     menuItems: MenuItem[]= [
         {icon: "pi pi-home", routerLink: "/home"},
         {icon: "pi pi-user"},
-
-
     ];
+
     slideMenuItems: MenuItem[] | undefined;
     activeItem: MenuItem | undefined;
 
@@ -28,43 +27,19 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-
-    constructor(private sessionServ: SessionService) {
+    constructor(private _sessionServ: SessionService) {
     }
 
     ngOnInit() {
 
-        this.sessionServ.getTokenObservable().subscribe((token) => {
-            this.menuItems.splice(2, 1)
+        this._sessionServ.getTokenObservable().subscribe((token) => {
             if(token) {
                 this.menuItems.push(this.logMenuItems.signOut)
             }
             else {
                 this.menuItems.push(this.logMenuItems.signIn)
             }
-            this.menuItems = [...this.menuItems]
         })
-
-        // this.menuItems = [
-        //     {icon: "pi pi-home", routerLink: "/home"},
-        //     {icon: "pi pi-user"},
-        //
-        //
-        // ];
-
-        // if(!sessionStorage.getItem("token")){
-        //     this.menuItems.push({
-        //         icon: "pi pi-sign-in",
-        //         routerLink: "/login"
-        //     })
-        // }else{
-        //     this.menuItems.push({
-        //         icon: "pi pi-sign-out",
-        //         routerLink: "/login",
-        //         command: () => this.onLogout()
-        //     })
-        // }
-
 
         this.activeItem = this.menuItems[0];
 
@@ -79,6 +54,6 @@ export class HeaderComponent implements OnInit {
     }
 
     onLogout(){
-        this.sessionServ.removeFromSession()
+        this._sessionServ.removeFromSession()
     }
 }
