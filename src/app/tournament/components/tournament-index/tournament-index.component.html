@@ -1,5 +1,9 @@
+<p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
 <div class="m-5">
-    <button pButton class="p-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" routerLink="/tournament/add"  *ngIf="user?.role === 'Admin'">Nouveau</button>
+    <button pButton
+            class="p-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+            routerLink="/tournament/add" *ngIf="user?.role === 'Admin'">Nouveau
+    </button>
 </div>
 
 <div class="p-5 bg-gray-800 m-5">
@@ -16,7 +20,8 @@
                     <label for="name">Nom</label>
                 </span>
                 <span class="p-float-label">
-                    <p-dropdown [options]="tournamentCategories" placeholder="Catégorie" [editable]="true" formControlName="category" id="categorie"
+                    <p-dropdown [options]="tournamentCategories" placeholder="Catégorie" [editable]="true"
+                                formControlName="category" id="categorie"
                                 optionLabel="name"></p-dropdown>
                     <label for="categorie">Catégorie</label>
 
@@ -25,7 +30,8 @@
             </div>
             <div class="flex flex-column w-30rem mt-5 mb-5">
                 <span class="p-float-label mb-2">
-                    <p-multiSelect [panelStyle]="{'width': '20rem'}" [options]="tournamentStatus" formControlName="status" id="status"
+                    <p-multiSelect [panelStyle]="{'width': '20rem'}" [options]="tournamentStatus"
+                                   formControlName="status" id="status"
                                    optionLabel="name"></p-multiSelect>
                     <label for="status">Statuts</label>
                 </span>
@@ -46,7 +52,7 @@
     </div>
     <p-progressSpinner *ngIf="showSpinner" class="flex justify-content-center align-items-center"></p-progressSpinner>
     <ng-container *ngIf="tournamentsSub$ | async as tournaments">
-        <p-table *ngIf="tournaments.results as results"  [value]="results" [tableStyle]="{ 'min-width': '50rem' }">
+        <p-table *ngIf="tournaments.results as results" [value]="results" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Nom</th>
@@ -77,13 +83,19 @@
                         /{{ tournament.maxPlayers }}
                     </td>
                     <td>
-                        <button pButton class="mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" routerLink="/tournament/details/{{tournament.id}}">
+                        <button pButton
+                                class="mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+                                routerLink="/tournament/details/{{tournament.id}}">
                             <i class="pi pi-search cursor-pointer"></i>
                         </button>
-                        <button pButton class=" mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
+                        <button pButton
+                                class=" mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+                                *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
                             <i class="pi pi-trash cursor-pointer"></i>
                         </button>
-                        <button disabled pButton class="border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
+                        <button disabled pButton
+                                class="border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+                                *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
                             <i class="pi pi-pencil cursor-pointer"></i>
                         </button>
                     </td>
@@ -94,5 +106,6 @@
 
     </ng-container>
 </div>
+
 
 

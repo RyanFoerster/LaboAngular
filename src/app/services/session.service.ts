@@ -10,21 +10,21 @@ export class SessionService {
     private _tokenSubject: BehaviorSubject<Token | null>
 
     constructor() {
-        const tokenFromSession = sessionStorage.getItem("token")
+        const tokenFromSession = sessionStorage.getItem('token')
         this._tokenSubject = new BehaviorSubject<Token | null>(tokenFromSession ? JSON.parse(tokenFromSession) : null)
     }
 
     addToSession(token: Token) {
-        sessionStorage.setItem("token", JSON.stringify(token));
+        sessionStorage.setItem('token', JSON.stringify(token));
         this._tokenSubject.next(token);
     }
 
     removeFromSession(): void {
-        sessionStorage.removeItem("token");
+        sessionStorage.removeItem('token');
         this._tokenSubject.next(null);
     }
 
-    clearSession(): void{
+    clearSession(): void {
         sessionStorage.clear();
         this._tokenSubject.next(null);
     }

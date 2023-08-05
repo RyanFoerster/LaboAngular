@@ -22,6 +22,7 @@ import {CardModule} from "primeng/card";
 import {SpinnerModule} from "primeng/spinner";
 import {CalendarModule} from "primeng/calendar";
 import {RadioButtonModule} from "primeng/radiobutton";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import {RadioButtonModule} from "primeng/radiobutton";
         CardModule,
         SpinnerModule,
         CalendarModule,
-        RadioButtonModule
+        RadioButtonModule,
+        ConfirmDialogModule
     ],
 })
 export class PrimeLibraryModule {

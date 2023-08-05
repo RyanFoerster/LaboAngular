@@ -1,14 +1,16 @@
-import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {MenuItem} from "primeng/api";
+import {Component, OnInit} from '@angular/core';
+import {ConfirmationService, ConfirmEventType, MenuItem, MessageService} from "primeng/api";
 import {SessionService} from "../../../services/session.service";
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    providers: [ConfirmationService, MessageService]
 })
 export class HeaderComponent implements OnInit {
-    menuItems: MenuItem[]= [
+
+    menuItems: MenuItem[] = [
         {icon: "pi pi-home", routerLink: "/home"},
         {icon: "pi pi-user"},
     ];
@@ -17,18 +19,46 @@ export class HeaderComponent implements OnInit {
     activeItem: MenuItem | undefined;
     refreshNeeded = false;
 
+    isAdmin: boolean = false
+
     logMenuItems = {
-        signIn:  {
+        signIn: {
             icon: "pi pi-sign-in",
             routerLink: "/login"
         },
         signOut: {
             icon: "pi pi-sign-out",
-            command: () => this.onLogout()
+            command: () => this.confirm1()
         }
     }
 
-    constructor(private _sessionServ: SessionService) {
+    adminMenuItems = {
+        adminMember: {
+            label: "Nouveau membre",
+            icon: "pi pi-plus",
+            routerLink: "/members/add"
+        },
+        adminTournament: {
+            label: "Tournois",
+            icon: "pi pi-calendar",
+            items: [
+                {
+                    label: "Index",
+                    icon: "pi pi-list",
+                    routerLink: "/tournament/index"
+                },
+                {
+                    label: "Nouveau",
+                    icon: "pi pi-plus-circle",
+                    routerLink: "/tournament/add"
+                }
+            ]
+        }
+    }
+
+    constructor(private _sessionServ: SessionService,
+                private _confirmationService: ConfirmationService,
+                private _messagesService: MessageService) {
     }
 
     ngOnInit() {
@@ -36,8 +66,11 @@ export class HeaderComponent implements OnInit {
         this._sessionServ.getTokenObservable().subscribe((token) => {
             this.refreshNeeded = true;
 
-            this.menuItems.splice(2,1)
+            this.menuItems.splice(2, 1)
             this.menuItems.push(token ? this.logMenuItems.signOut : this.logMenuItems.signIn)
+            this.isAdmin = token?.user.role == "Admin"
+
+            this.updateSlideMenuItems();
 
             setTimeout(() => this.refreshNeeded = false, 100)
 
@@ -45,6 +78,9 @@ export class HeaderComponent implements OnInit {
 
         this.activeItem = this.menuItems[0];
 
+    }
+
+    updateSlideMenuItems() {
         this.slideMenuItems = [
             {
                 label: "Accueil",
@@ -52,42 +88,49 @@ export class HeaderComponent implements OnInit {
                 routerLink: "/home"
             },
             {
-                label: "Tournois",
-                icon: "pi pi-calendar",
-                items: [
-                    {
-                        label: "Index",
-                        icon: "pi pi-list",
-                        routerLink: "/tournament/index"
-                    },
-                    {
-                        label: "Nouveau",
-                        icon: "pi pi-plus-circle",
-                        routerLink: "/tournament/add"
-                    }
-                ]
+                label: "Index",
+                icon: "pi pi-list",
+                routerLink: "/tournament/index"
             },
-            {
-                label: "Nouveau membre",
-                icon: "pi pi-user-plus",
-                routerLink: "/members/add"
-            },
-            {
-                separator: true
-            },
-            {
-                label: 'Quit',
-                icon: 'pi pi-fw pi-power-off',
-                command: () => this.onLogout()
-            }
+
         ];
+
+        if (this._sessionServ.getToken()){
+            if (this.isAdmin) {
+                this.slideMenuItems.splice(2, 0, this.adminMenuItems.adminMember);
+                // @ts-ignore
+                this.slideMenuItems.splice(1, 1, this.adminMenuItems.adminTournament)
+            }
+        }
+
     }
 
     onActiveItemChange(event: MenuItem) {
         this.activeItem = event
     }
 
-    onLogout(){
+    onLogout() {
         this._sessionServ.removeFromSession()
+    }
+
+    confirm1() {
+        this._confirmationService.confirm({
+            message: 'Vous êtes sur de vouloir vous déconnecter ?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.onLogout()
+                this._messagesService.add({ severity: 'info', summary: 'Confirmed', detail: 'Vous avez été déconnecter' });
+            },
+            reject: (type: ConfirmEventType) => {
+                switch (type) {
+                    case ConfirmEventType.REJECT:
+                        this._messagesService.add({ severity: 'warn', summary: 'Rejected', detail: 'Vous avez annuler' });
+                        break;
+                    case ConfirmEventType.CANCEL:
+                        this._messagesService.add({ severity: 'warn', summary: 'Rejected', detail: 'Vous avez annuler' });
+                        break;
+                }
+            }
+        });
     }
 }

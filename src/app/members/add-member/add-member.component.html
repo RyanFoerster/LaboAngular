@@ -37,7 +37,7 @@
                         Cet username est disponible
                     </small>
 
-                    <small class="p-error" *ngIf="!isUsernameAvailable">
+                    <small class="p-error" *ngIf="!isUsernameAvailable && isEmailAvailable !== undefined">
                         Cet username est pas disponible
                     </small>
 
@@ -72,7 +72,7 @@
                         Cet email est disponible
                     </small>
 
-                    <small class="p-error" *ngIf="!isEmailAvailable">
+                    <small class="p-error" *ngIf="!isEmailAvailable && isEmailAvailable !== undefined">
                         Cet email est pas disponible
                     </small>
 

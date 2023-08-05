@@ -15,8 +15,8 @@ export class AddMemberComponent {
     addMemberForm: FormGroup
     maxDate: Date = new Date()
     genders = this.enumToDropdownOptions(UserGender)
-    isEmailAvailable: boolean | null = true
-    isUsernameAvailable: boolean = true
+    isEmailAvailable!: boolean
+    isUsernameAvailable!: boolean
 
     constructor(private _formBuilder: FormBuilder,
                 private _memberService: MemberService,
