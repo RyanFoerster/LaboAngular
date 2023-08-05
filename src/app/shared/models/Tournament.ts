@@ -11,7 +11,7 @@ export interface Tournament {
   eloMax?: number
   categories?: TournamentCategory[]
   womenOnly: boolean
-  endOfRegistration: Date
+  endOfRegistration: string
   count: number
   canRegister: boolean
   isRegistered: boolean

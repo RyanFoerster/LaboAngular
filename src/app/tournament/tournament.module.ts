@@ -7,6 +7,8 @@ import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import { TournamentDetailsComponent } from './components/tournament-details/tournament-details.component';
 import { TournamentAddComponent } from './components/tournament-add/tournament-add.component';
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {JwtInterceptor} from "../interceptors/jwt.interceptor";
 
 
 @NgModule({

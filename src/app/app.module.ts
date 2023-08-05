@@ -7,9 +7,12 @@ import {CoreModule} from "./core/core.module";
 import {HomeModule} from "./home/home.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SharedModule} from "./shared/shared.module";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {LoginComponent} from './login/login.component';
 import {TournamentModule} from "./tournament/tournament.module";
+import {JwtInterceptor} from "./interceptors/jwt.interceptor";
+import { AddMemberComponent } from './members/add-member/add-member.component';
+import {MembersModule} from "./members/members.module";
 
 @NgModule({
     declarations: [
@@ -24,9 +27,12 @@ import {TournamentModule} from "./tournament/tournament.module";
         BrowserAnimationsModule,
         SharedModule,
         HttpClientModule,
-        TournamentModule
+        TournamentModule,
+        MembersModule
     ],
-    providers: [],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

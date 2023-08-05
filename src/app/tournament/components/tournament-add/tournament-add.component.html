@@ -2,13 +2,118 @@
     <p-button routerLink="/tournament/index">Retour à l'index</p-button>
     <h1>Nouveau Tournoi</h1>
     <p-card>
-        <form>
-            <div>
-                <span class="p-float-label">
-                    <input pInputText required="true" id="name"/>
-                    <label for="name" class="required">Nom</label>
+        <form [formGroup]="addForm" (ngSubmit)="addTournament()">
+            <div class="flex justify-content-between mb-5">
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label w-12">
+                        <input formControlName="name" class="w-12" pInputText required="true" id="name"/>
+                        <label for="name" class="required">Nom<span class="text-red-800">*</span></label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('name')?.errors?.['required']
+                     && addForm.get('name')?.touched">Ce champ est requis</small>
+                    <small class="p-error" *ngIf="addForm.get('name')?.errors?.['maxlength']">Le champ ne doit pas
+                        dépasser 100 caractères</small>
+                    <small class="p-error" *ngIf="addForm.get('name')?.errors?.['minlength']">Le champ doit faire
+                        minimum 1 caractère</small>
+                </div>
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label w-12">
+                        <input formControlName="location" class="w-12" pInputText required="true" id="location"/>
+                        <label for="location" class="required">Lieu</label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('location')?.errors?.['maxlength']">Le champ ne doit pas
+                        dépasser 100 caractères</small>
+                </div>
+
+            </div>
+
+            <div class="flex justify-content-between mb-5">
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label w-12">
+                        <input formControlName="minPlayers" class="w-12" pInputText required="true" id="minPlayers"/>
+                        <label for="name" class="required">Nombre minimum de joueurs (2-16)<span
+                        class="text-red-800">*</span></label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('minPlayers')?.errors?.['required']
+                     && addForm.get('name')?.touched">Ce champ est requis</small>
+                    <small class="p-error" *ngIf="addForm.get('minPlayers')?.errors?.['max']">Le champ ne doit pas
+                        dépasser 16 joueurs</small>
+                    <small class="p-error" *ngIf="addForm.get('minPlayers')?.errors?.['min']">Le champ ne doit pas
+                        faire moins de 2 joueurs</small>
+                </div>
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label w-12">
+                        <input formControlName="maxPlayers" class="w-12" pInputText required="true" id="maxPlayers"/>
+                        <label for="maxPlayers" class="required">Nombre maximum de joueurs (2-16)<span class="text-red-800">*</span></label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('maxPlayers')?.errors?.['required']
+                     && addForm.get('name')?.touched">Ce champ est requis</small>
+                    <small class="p-error" *ngIf="addForm.get('maxPlayers')?.errors?.['max']">Le champ ne doit pas
+                        dépasser 16 joueurs</small>
+                    <small class="p-error" *ngIf="addForm.get('maxPlayers')?.errors?.['min']">Le champ ne doit pas
+                        faire moins de 2 joueurs</small>
+                </div>
+
+            </div>
+
+            <div class="flex justify-content-between mb-5">
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label w-12">
+                        <p-inputNumber [style]="{width: '100%'}" id="eloMin" formControlName="eloMin"></p-inputNumber>
+                        <label for="eloMax">ELO minimum (0-3000)</label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('eloMin')?.errors?.['max']">Le champ ne doit pas
+                        dépasser 3000 d'elo</small>
+                    <small class="p-error" *ngIf="addForm.get('eloMin')?.errors?.['min']">Le champ ne doit pas
+                        faire moins de 0 elo</small>
+                </div>
+
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label w-12">
+                        <p-inputNumber [style]="{width: '100%'}" id="eloMax" formControlName="eloMax"></p-inputNumber>
+                        <label for="eloMax">ELO maximum (0-3000)</label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('eloMax')?.errors?.['max']">Le champ ne doit pas
+                        dépasser 3000 d'elo</small>
+                    <small class="p-error" *ngIf="addForm.get('eloMax')?.errors?.['min']">Le champ ne doit pas
+                        faire moins de 0 elo</small>
+                </div>
+
+            </div>
+
+            <div class="flex justify-content-between">
+                <div class="flex flex-column w-6">
+                    <span class="p-float-label mb-2 w-12">
+                        <p-multiSelect [style]="{width: '100%'}" class="w-12" [panelStyle]="{'width': '20rem'}"
+                                       [options]="tournamentCategories"
+                                       formControlName="categories" id="categories"
+                                       optionLabel="name">
+                        </p-multiSelect>
+                        <label for="categories">Catégories<span class="text-red-800">*</span></label>
+                    </span>
+                    <small class="p-error" *ngIf="addForm.get('categories')?.errors?.['required']
+                     && addForm.get('categories')?.touched">Ce champ est requis</small>
+                </div>
+
+                <div class="flex flex-column w-6">
+                    <p-calendar class="w-12" dateFormat="dd/mm/yy" [style]="{width: '100%'}"
+                                formControlName="endOfRegistrationDate" [minDate]="minDate"
+                                [readonlyInput]="true">
+                    </p-calendar>
+                    <small class="p-error" *ngIf="addForm.get('endOfRegistrationDate')?.errors?.['required']
+                     && addForm.get('endOfRegistrationDate')?.touched">Ce champ est requis</small>
+                </div>
+
+            </div>
+
+            <div class="mb-2">
+                <span class="flex">
+                    <span id="women" class="align-self-center mr-3">Réservé aux filles</span>
+                    <p-inputSwitch formControlName="womenOnly" ariaLabelledBy="women"></p-inputSwitch>
                 </span>
             </div>
+
+            <p-button type="submit" label="Ajouter"></p-button>
         </form>
     </p-card>
 </ng-container>

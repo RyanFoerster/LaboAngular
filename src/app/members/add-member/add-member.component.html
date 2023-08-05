@@ -1,0 +1,128 @@
+<div>
+    <h1>Nouveau membre</h1>
+
+    <p-card>
+        <form [formGroup]="addMemberForm" (ngSubmit)="addMember()">
+
+            <div class="flex justify-content-between mb-5">
+
+                <div class="flex flex-column w-6">
+
+                    <span class="p-float-label w-12">
+
+                        <input formControlName="username" class="w-12" pInputText required="true" id="name" (blur)="checkUsernameAvailability()"/>
+
+                        <label for="name" class="required">
+                            Username<span class="text-red-800">*</span>
+                        </label>
+
+
+
+                    </span>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('username')?.errors?.['required']
+                     && addMemberForm.get('username')?.touched">
+                        Ce champ est requis
+                    </small>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('username')?.errors?.['maxlength']">
+                        Le champ ne doit pas dépasser 100 caractères
+                    </small>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('username')?.errors?.['minlength']">
+                        Le champ doit faire minimum 1 caractère
+                    </small>
+
+                    <small class="text-green-400" *ngIf="isUsernameAvailable">
+                        Cet username est disponible
+                    </small>
+
+                    <small class="p-error" *ngIf="!isUsernameAvailable">
+                        Cet username est pas disponible
+                    </small>
+
+                </div>
+
+                <div class="flex flex-column w-6">
+
+                    <span class="p-float-label w-12">
+
+                        <input  formControlName="email" class="w-12" pInputText required="true" id="email" (blur)="checkEmailAvailability()"/>
+
+                        <label for="email" class="required">
+                            Email<span class="text-red-800">*</span>
+                        </label>
+
+                    </span>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('email')?.errors?.['required']
+                     && addMemberForm.get('email')?.touched">
+                        Ce champ est requis
+                    </small>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('email')?.errors?.['min']">Le champ doit faire
+                        minimum 1 caractère
+                    </small>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('email')?.errors?.['email']">
+                        Email non valide
+                    </small>
+
+                    <small class="text-green-400" *ngIf="isEmailAvailable">
+                        Cet email est disponible
+                    </small>
+
+                    <small class="p-error" *ngIf="!isEmailAvailable">
+                        Cet email est pas disponible
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="flex justify-content-between mb-5">
+
+                <div class="flex flex-column w-6">
+
+                    <p-calendar class="w-12" dateFormat="dd/mm/yy" [style]="{width: '100%'}"
+                                 formControlName="birthDate" [maxDate]="maxDate"
+                                 [readonlyInput]="true">
+                    </p-calendar>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('birthDate')?.errors?.['required']
+                     && addMemberForm.get('birthDate')?.touched">
+                        Ce champ est requis
+                    </small>
+
+                </div>
+
+                <div class="flex flex-column w-6">
+
+                    <span class="p-float-label w-12">
+                        <p-inputNumber [style]="{width: '100%'}" id="elo" formControlName="elo"></p-inputNumber>
+                        <label for="elo">ELO (0-3000)</label>
+                    </span>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('elo')?.errors?.['max']">
+                        Le champ ne doit pas dépasser 3000 d'elo
+                    </small>
+
+                    <small class="p-error" *ngIf="addMemberForm.get('elo')?.errors?.['min']">
+                        Le champ ne doit pas faire moins de 0 elo
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="mb-2">
+                <div *ngFor="let gender of genders" class="field-checkbox">
+                    <p-radioButton [inputId]="gender.key" [value]="gender.name" formControlName="gender"></p-radioButton>
+                    <label [for]="gender.key" class="ml-2">{{ gender.name }}</label>
+                </div>
+            </div>
+
+            <p-button [disabled]="!addMemberForm.valid" type="submit" label="Ajouter"></p-button>
+        </form>
+    </p-card>
+</div>

@@ -5,7 +5,7 @@ import {delay, Observable, tap} from "rxjs";
 import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
 import {TournamentIndex} from "../../../shared/models/TournamentIndex";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {SessionService} from "../../../services/session.service";
 import {User} from "../../../shared/models/User";
 
@@ -93,6 +93,19 @@ export class TournamentIndexComponent implements OnInit{
         this.showSearchForm = !this.showSearchForm
     }
 
-
-    protected readonly TournamentCategory = TournamentCategory;
+    deleteTournament(tournamentId: string) {
+        this._tournamentService.delete(tournamentId).subscribe(() => {
+            this.tournamentsSub$ = this._tournamentService.getTournaments({
+                offset: undefined,
+                name: undefined,
+                category: undefined,
+                status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
+                womenOnly: undefined
+            }).pipe(
+                tap(() => this.showSpinner = true),
+                delay(1000),
+                tap(() => this.showSpinner = false)
+            )
+        })
+    }
 }

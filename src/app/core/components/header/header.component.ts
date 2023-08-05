@@ -46,8 +46,40 @@ export class HeaderComponent implements OnInit {
         this.activeItem = this.menuItems[0];
 
         this.slideMenuItems = [
-            {label: "Accueil", icon: "pi pi-home", routerLink: "/home"},
-            {label: "Tournois", icon: "pi pi-list", routerLink: "/tournament/index"},
+            {
+                label: "Accueil",
+                icon: "pi pi-home",
+                routerLink: "/home"
+            },
+            {
+                label: "Tournois",
+                icon: "pi pi-calendar",
+                items: [
+                    {
+                        label: "Index",
+                        icon: "pi pi-list",
+                        routerLink: "/tournament/index"
+                    },
+                    {
+                        label: "Nouveau",
+                        icon: "pi pi-plus-circle",
+                        routerLink: "/tournament/add"
+                    }
+                ]
+            },
+            {
+                label: "Nouveau membre",
+                icon: "pi pi-user-plus",
+                routerLink: "/members/add"
+            },
+            {
+                separator: true
+            },
+            {
+                label: 'Quit',
+                icon: 'pi pi-fw pi-power-off',
+                command: () => this.onLogout()
+            }
         ];
     }
 

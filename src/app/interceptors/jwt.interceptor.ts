@@ -11,11 +11,11 @@ export class JwtInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-        if(this._sessionService.getToken()){
-            const headers = new HttpHeaders({
-                authorization: `Bearer ${this._sessionService.getToken()?.token}`
-            })
-            const newRequest = request.clone({headers})
+        if (this._sessionService.getToken()) {
+            let headers = new HttpHeaders()
+            const token = this._sessionService.getToken()?.token
+            headers = headers.append('Authorization', `Bearer ${token}`)
+            const newRequest = request.clone({headers: headers})
             return next.handle(newRequest)
         }
 

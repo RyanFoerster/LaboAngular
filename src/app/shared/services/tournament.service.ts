@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Tournament} from "../models/Tournament";
@@ -6,13 +6,16 @@ import {environments} from "../../../environments/environments";
 import {TournamentIndex} from "../models/TournamentIndex";
 import {TournamentCategory} from "../enums/TournamentCategory";
 import {TournamentDetails} from "../models/TournamentDetails";
+import {TournamentAdd} from "../models/TournamentAdd";
+import {FormGroup} from "@angular/forms";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class TournamentService {
 
-  constructor(private _httpClient: HttpClient) { }
+    constructor(private _httpClient: HttpClient) {
+    }
 
     getTournaments(params: {
         offset?: number;
@@ -43,11 +46,19 @@ export class TournamentService {
 
         return this._httpClient.get<TournamentIndex>(
             `${environments.apiUrl}/Tournament`,
-            { params: httpParams }
+            {params: httpParams}
         );
     }
 
-    getOneTournament(id: string): Observable<TournamentDetails>{
-      return this._httpClient.get<TournamentDetails>(`${environments.apiUrl}/Tournament/${id}`)
+    getOneTournament(id: string): Observable<TournamentDetails> {
+        return this._httpClient.get<TournamentDetails>(`${environments.apiUrl}/Tournament/${id}`)
+    }
+
+    addTournament(tournamentToAdd: TournamentAdd) {
+        return this._httpClient.post<TournamentAdd>(`${environments.apiUrl}/Tournament`, tournamentToAdd)
+    }
+
+    delete(tournamentId: string) {
+        return this._httpClient.delete(`${environments.apiUrl}/Tournament/${tournamentId}`)
     }
 }

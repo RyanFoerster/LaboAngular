@@ -20,6 +20,8 @@ import {StepsModule} from "primeng/steps";
 import {ToastModule} from "primeng/toast";
 import {CardModule} from "primeng/card";
 import {SpinnerModule} from "primeng/spinner";
+import {CalendarModule} from "primeng/calendar";
+import {RadioButtonModule} from "primeng/radiobutton";
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import {SpinnerModule} from "primeng/spinner";
         StepsModule,
         ToastModule,
         CardModule,
-        SpinnerModule
+        SpinnerModule,
+        CalendarModule,
+        RadioButtonModule
     ],
 })
 export class PrimeLibraryModule {

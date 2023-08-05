@@ -1,5 +1,5 @@
-<div class="mt-3">
-    <p-button class="p-5" routerLink="/tournament/add"  *ngIf="user?.role === 'Admin'">Nouveau</p-button>
+<div class="m-5">
+    <button pButton class="p-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" routerLink="/tournament/add"  *ngIf="user?.role === 'Admin'">Nouveau</button>
 </div>
 
 <div class="p-5 bg-gray-800 m-5">
@@ -77,8 +77,14 @@
                         /{{ tournament.maxPlayers }}
                     </td>
                     <td>
-                        <button routerLink="/tournament/details/{{tournament.id}}">
+                        <button pButton class="mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" routerLink="/tournament/details/{{tournament.id}}">
                             <i class="pi pi-search cursor-pointer"></i>
+                        </button>
+                        <button pButton class=" mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
+                            <i class="pi pi-trash cursor-pointer"></i>
+                        </button>
+                        <button disabled pButton class="border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
+                            <i class="pi pi-pencil cursor-pointer"></i>
                         </button>
                     </td>
                 </tr>
