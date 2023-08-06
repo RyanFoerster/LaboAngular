@@ -4,11 +4,13 @@ import {AddMemberComponent} from "./add-member/add-member.component";
 import {PrimeLibraryModule} from "../shared/prime-library.module";
 import {SharedModule} from "../shared/shared.module";
 import {MembersRoutingModule} from "./members-routing.module";
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 @NgModule({
     declarations: [
-        AddMemberComponent
+        AddMemberComponent,
+        ChangePasswordComponent
     ],
     imports: [
         CommonModule,

@@ -1,26 +1,32 @@
 import {Component, OnInit} from '@angular/core';
-import {Tournament} from "../../shared/models/Tournament";
-import {TournamentService} from "../../shared/services/tournament.service";
-import {Observable, tap} from "rxjs";
-import {TournamentIndex} from "../../shared/models/TournamentIndex";
-import {SessionService} from "../../services/session.service";
-import {User} from "../../shared/models/User";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../shared/services/auth.service";
+import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+    styleUrls: ['./home.component.scss'],
+    animations: [
+        trigger('pageAnimation', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('300ms', style({ opacity: 1 })),
+            ]),
+            transition(':leave', [
+                animate('300ms', style({ opacity: 0 })),
+            ]),
+        ]),
+    ],
 })
 export class HomeComponent implements OnInit {
+
+    animationState: boolean = false;
 
 
     constructor() {
     }
 
     ngOnInit(): void {
-
+        this.animationState = true
     }
 
 

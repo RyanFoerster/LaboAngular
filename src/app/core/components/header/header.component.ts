@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ConfirmationService, ConfirmEventType, MenuItem, MessageService} from "primeng/api";
-import {SessionService} from "../../../services/session.service";
+import {SessionService} from "../../../shared/services/session.service";
 
 @Component({
     selector: 'app-header',
@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
 
     menuItems: MenuItem[] = [
         {icon: "pi pi-home", routerLink: "/home"},
-        {icon: "pi pi-user"},
+        {icon: "pi pi-user", routerLink: "/members/change-password"},
     ];
 
     slideMenuItems: MenuItem[] | undefined;

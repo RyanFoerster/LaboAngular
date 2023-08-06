@@ -4,7 +4,7 @@
         <p-card class="p-5" >
             <p-steps [model]="tournamentItems" [readonly]="false" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)"></p-steps>
         </p-card>
-        <div>
+        <div [@pageAnimation]="animationState ? 'in' : 'out'">
             <p-panel *ngIf="tournament" [style]="{width: '55%'}">
                 <ng-template pTemplate="header">
                     <span class="text-primary font-semibold text-xl">

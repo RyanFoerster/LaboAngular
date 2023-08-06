@@ -1,7 +1,7 @@
 <ng-container class="p-5">
     <p-button routerLink="/tournament/index">Retour à l'index</p-button>
     <h1>Nouveau Tournoi</h1>
-    <p-card>
+    <p-card [@pageAnimation]="animationState ? 'in' : 'out'">
         <form [formGroup]="addForm" (ngSubmit)="addTournament()">
             <div class="flex justify-content-between mb-5">
                 <div class="flex flex-column w-6">

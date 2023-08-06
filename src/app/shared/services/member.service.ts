@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {User} from "../models/User";
 import {Observable} from "rxjs";
 import {environments} from "../../../environments/environments";
+import {ChangePassword} from "../models/ChangePassword";
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,9 @@ export class MemberService {
 
   addMember(memberToAdd: User): Observable<User>{
       return this._httpClient.post<User>(`${environments.apiUrl}/Member`, memberToAdd)
+  }
+
+  changePassword(password: ChangePassword): Observable<ChangePassword>{
+      return this._httpClient.patch<ChangePassword>(`${environments.apiUrl}/Member/password`, password)
   }
 }

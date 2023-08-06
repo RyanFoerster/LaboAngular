@@ -1,27 +1,39 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserGender} from "../../shared/enums/UserGender";
 import {MemberService} from "../../shared/services/member.service";
 import {HttpClient} from "@angular/common/http";
 import {environments} from "../../../environments/environments";
+import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
-  selector: 'app-add-member',
-  templateUrl: './add-member.component.html',
-  styleUrls: ['./add-member.component.scss']
+    selector: 'app-add-member',
+    templateUrl: './add-member.component.html',
+    styleUrls: ['./add-member.component.scss'],
+    animations: [
+        trigger('pageAnimation', [
+            transition(':enter', [
+                style({opacity: 0}),
+                animate('300ms', style({opacity: 1})),
+            ]),
+            transition(':leave', [
+                animate('300ms', style({opacity: 0})),
+            ]),
+        ]),
+    ],
 })
-export class AddMemberComponent {
+export class AddMemberComponent implements OnInit {
 
     addMemberForm: FormGroup
     maxDate: Date = new Date()
     genders = this.enumToDropdownOptions(UserGender)
     isEmailAvailable!: boolean
     isUsernameAvailable!: boolean
+    animationState: boolean = false
 
     constructor(private _formBuilder: FormBuilder,
                 private _memberService: MemberService,
-                private _httpClient: HttpClient)
-    {
+                private _httpClient: HttpClient) {
 
         this.addMemberForm = this._formBuilder.group({
             username: [null, [
@@ -46,12 +58,16 @@ export class AddMemberComponent {
 
     }
 
-    private enumToDropdownOptions(myEnum: any): any[] {
-        return Object.keys(myEnum).map((key) => ({ name: myEnum[key], value: key }));
+    ngOnInit() {
+        this.animationState = true
     }
 
-    addMember(){
-        if(this.addMemberForm.valid){
+    private enumToDropdownOptions(myEnum: any): any[] {
+        return Object.keys(myEnum).map((key) => ({name: myEnum[key], value: key}));
+    }
+
+    addMember() {
+        if (this.addMemberForm.valid) {
             this._memberService.addMember(this.addMemberForm.value).subscribe()
         }
     }

@@ -4,11 +4,23 @@ import {registrationDateValidator} from "../../../shared/validators/registration
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
 import {TournamentService} from "../../../shared/services/tournament.service";
 import {Router} from "@angular/router";
+import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-tournament-add',
   templateUrl: './tournament-add.component.html',
-  styleUrls: ['./tournament-add.component.scss']
+  styleUrls: ['./tournament-add.component.scss'],
+    animations: [
+        trigger('pageAnimation', [
+            transition(':enter', [
+                style({opacity: 0}),
+                animate('300ms', style({opacity: 1})),
+            ]),
+            transition(':leave', [
+                animate('300ms', style({opacity: 0})),
+            ]),
+        ]),
+    ],
 })
 export class TournamentAddComponent implements OnInit{
 
@@ -17,6 +29,7 @@ export class TournamentAddComponent implements OnInit{
     tournamentCategories = this.enumToDropdownOptions(TournamentCategory);
     currentDate: Date = new Date()
 
+    animationState: boolean = false;
 
     minDate: Date = this.currentDate;
 
@@ -55,7 +68,7 @@ export class TournamentAddComponent implements OnInit{
             categories: [false, [
                 Validators.required
             ]],
-            womenOnly: [null, [
+            womenOnly: [false, [
                 Validators.required
             ]],
             endOfRegistrationDate: [null, [
@@ -66,6 +79,7 @@ export class TournamentAddComponent implements OnInit{
     }
 
     ngOnInit() {
+        this.animationState = true
         this.currentDate.setDate(this.currentDate.getDate() + 3)
     }
 
@@ -88,7 +102,10 @@ export class TournamentAddComponent implements OnInit{
             this.addForm.patchValue({
                 categories: categoriesName
             });
-            this._tournamentService.addTournament(this.addForm.value).subscribe(() => this._router.navigateByUrl("/tournament/index"))
+            this._tournamentService.addTournament(this.addForm.value).subscribe(data => {
+                console.log(data)
+                this._router.navigateByUrl("/tournament/index")
+            })
         }
     }
 }

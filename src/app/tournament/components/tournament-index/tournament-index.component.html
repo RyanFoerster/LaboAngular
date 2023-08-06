@@ -1,12 +1,12 @@
 <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
-<div class="m-5">
+<div class="m-5" >
     <button pButton
             class="p-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
             routerLink="/tournament/add" *ngIf="user?.role === 'Admin'">Nouveau
     </button>
 </div>
 
-<div class="p-5 bg-gray-800 m-5">
+<div class="p-5 bg-gray-800 m-5" [@pageAnimation]="animationState ? 'in' : 'out'">
     <button
         class="mb-5 border-none bg-primary border-1 border-black-alpha-80 border-round-md p-1 cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
         (click)="toggleShowForm()">

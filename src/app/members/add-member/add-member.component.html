@@ -1,7 +1,7 @@
 <div>
     <h1>Nouveau membre</h1>
 
-    <p-card>
+    <p-card [@pageAnimation]="animationState ? 'in' : 'out'">
         <form [formGroup]="addMemberForm" (ngSubmit)="addMember()">
 
             <div class="flex justify-content-between mb-5">
