@@ -9,6 +9,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {SessionService} from "../../../shared/services/session.service";
 import {User} from "../../../shared/models/User";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {TournamentDetails} from "../../../shared/models/TournamentDetails";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-tournament-index',
@@ -42,7 +44,8 @@ export class TournamentIndexComponent implements OnInit {
 
     constructor(private _tournamentService: TournamentService,
                 private _formBuilder: FormBuilder,
-                private _sessionService: SessionService) {
+                private _sessionService: SessionService,
+                private _router: Router) {
 
         this.searchForm = this._formBuilder.group({
             name: [null],
@@ -68,6 +71,7 @@ export class TournamentIndexComponent implements OnInit {
             status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
             womenOnly: undefined
         })
+
     }
 
     private enumToDropdownOptions(myEnum: any): any[] {
@@ -118,10 +122,55 @@ export class TournamentIndexComponent implements OnInit {
                 status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
                 womenOnly: undefined
             }).pipe(
-                tap(() => this.showSpinner = true),
+                tap(() => {
+                    this.showSpinner = true
+                }),
                 delay(1000),
-                tap(() => this.showSpinner = false)
+                tap(() => {
+                    this.showSpinner = false
+                    this._router.navigateByUrl("/tournament/index")
+                })
             )
         })
+    }
+
+
+    subscribe(tournamentId: string) {
+
+        this._tournamentService.subscribeTournament(tournamentId, this.user).pipe(
+            tap(() => {
+                this.showSpinner = true
+                this.tournamentsSub$ = this._tournamentService.getTournaments({
+                    offset: undefined,
+                    name: undefined,
+                    category: undefined,
+                    status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
+                    womenOnly: undefined
+                })
+
+            }),
+            delay(1000),
+            tap(() => {
+                this.showSpinner = false
+                this._router.navigateByUrl("/tournament/index")
+            })
+        ).subscribe()
+    }
+
+    unsubscribe(tournamentId: string) {
+        this._tournamentService.unsubscribeTournament(tournamentId).pipe(
+            tap(() => {
+                this.showSpinner = true
+                this.tournamentsSub$ = this._tournamentService.getTournaments({
+                    offset: undefined,
+                    name: undefined,
+                    category: undefined,
+                    status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
+                    womenOnly: undefined
+                })
+            }),
+            delay(1000),
+            tap(() => this.showSpinner = false)
+        ).subscribe()
     }
 }

@@ -1,21 +1,45 @@
-<form [formGroup]="loginForm" class="flex justify-content-center align-items-center flex-column" (ngSubmit)="onLogin()">
-    <div>
-        <span class="p-float-label ng-invalid">
-            <input pInputText id="username" formControlName="username" aria-describedby="username-help"/>
-            <label for="username">Username</label>
-        </span>
-        <small *ngIf="loginForm.get('username')?.errors?.['required'] && loginForm.get('username')?.touched" id="username-help" class="p-error">Username is not available.</small>
-    </div>
+<div class="flex flex-column justify-content-center align-items-center h-25rem w-screen">
+    <p-card class="w-3">
 
-    <div class="flex">
-        <span class="p-float-label ng-dirty ng-invalid">
-            <p-password [feedback]="true" formControlName="password" [toggleMask]="true"/>
-            <label>Password</label>
-        </span>
-        <p-message severity="error" text="Ce champs est requis"
-                   *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched"></p-message>
-    </div>
+        <h1 class="mb-5 text-center">Connexion</h1>
 
-    <p-button type="submit" label="Se connecter" styleClass="p-button-rounded" [loading]="loading" (click)="load()"></p-button>
+        <form [formGroup]="loginForm" class="flex justify-content-center align-items-center flex-column w-12"
+              (ngSubmit)="onLogin()">
 
-</form>
+            <div class="flex flex-column justify-content-between mb-5 w-12">
+
+                <div class="flex flex-column w-12 mb-5">
+
+                    <span class="p-float-label ng-invalid">
+                        <input class="w-12" pInputText id="username" formControlName="username" aria-describedby="username-help"/>
+                        <label for="username">Username</label>
+                    </span>
+
+                    <small *ngIf="loginForm.get('username')?.errors?.['required'] && loginForm.get('username')?.touched"
+                           id="username-help" class="p-error">
+                        Ce champs est requis
+                    </small>
+
+                </div>
+
+                <div class="flex flex-column w-12">
+
+                    <span class="p-float-label ng-dirty ng-invalid">
+
+                        <p-password [inputStyle]="{width: '100%'}" [style]="{width: '100%'}" [feedback]="true" formControlName="password" [toggleMask]="true"/>
+                        <label>Password</label>
+
+                    </span>
+
+                    <small *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched" class="p-error">
+                        Ce champs est requis
+                    </small>
+
+                </div>
+            </div>
+            <p-button class="w-12" [style]="{width: '100%'}" type="submit" label="Se connecter" styleClass="p-button-rounded" [loading]="loading"
+                      (click)="load()"></p-button>
+
+        </form>
+    </p-card>
+</div>

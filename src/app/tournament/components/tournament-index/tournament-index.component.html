@@ -1,4 +1,4 @@
-<p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+
 <div class="m-5" >
     <button pButton
             class="p-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
@@ -52,58 +52,66 @@
     </div>
     <p-progressSpinner *ngIf="showSpinner" class="flex justify-content-center align-items-center"></p-progressSpinner>
     <ng-container *ngIf="tournamentsSub$ | async as tournaments">
-        <p-table *ngIf="tournaments.results as results" [value]="results" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Nom</th>
-                    <th>Location</th>
-                    <th>Categories</th>
-                    <th>Elo</th>
-                    <th>Statut</th>
-                    <th>Fin des inscriptions</th>
-                    <th>Joueurs</th>
-                    <th></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-tournament>
-                <tr>
-                    <td>{{ tournament.name }}</td>
-                    <td>{{ tournament.location }}</td>
-                    <td>{{ tournament.categories }}</td>
-                    <td>{{ tournament.eloMin === null ? "-" : tournament.eloMin }}
-                        / {{ tournament.eloMax === null ? "-" : tournament.eloMax }}</td>
-                    <td>{{ tournament.status }}</td>
-                    <td>{{ tournament.endOfRegistrationDate | date}}</td>
-                    <td>
+        <div *ngIf="!showSpinner">
+            <p-table *ngIf="tournaments.results as results" [value]="results" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Location</th>
+                        <th>Categories</th>
+                        <th>Elo</th>
+                        <th>Statut</th>
+                        <th>Fin des inscriptions</th>
+                        <th>Joueurs</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tournament>
+                    <tr>
+                        <td>{{ tournament.name }}</td>
+                        <td>{{ tournament.location }}</td>
+                        <td>{{ tournament.categories }}</td>
+                        <td>{{ tournament.eloMin === null ? "-" : tournament.eloMin }}
+                            / {{ tournament.eloMax === null ? "-" : tournament.eloMax }}</td>
+                        <td>{{ tournament.status }}</td>
+                        <td>{{ tournament.endOfRegistrationDate | date}}</td>
+                        <td>
                     <span [ngClass]="{'text-red-400': tournament.count === 0,
                  'text-orange-400': tournament.count > 0 && tournament.count < tournament.maxPlayers,
                   'text-green-400': tournament.count === tournament.maxPlayers}">
                     {{ tournament.count }}
                     </span>
-                        /{{ tournament.maxPlayers }}
-                    </td>
-                    <td>
-                        <button pButton
-                                class="mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
-                                routerLink="/tournament/details/{{tournament.id}}">
-                            <i class="pi pi-search cursor-pointer"></i>
-                        </button>
-                        <button pButton
-                                class=" mr-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
-                                *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
-                            <i class="pi pi-trash cursor-pointer"></i>
-                        </button>
-                        <button disabled pButton
-                                class="border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
-                                *ngIf="user?.role === 'Admin'" (click)="deleteTournament(tournament.id)">
-                            <i class="pi pi-pencil cursor-pointer"></i>
-                        </button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-        <p-paginator [totalRecords]="tournaments.total"></p-paginator>
+                            /{{ tournament.maxPlayers }}
+                        </td>
+                        <td>
 
+                            <button pButton
+                                    class="mr-1 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+                                    routerLink="/tournament/details/{{tournament.id}}">
+                                <i class="pi pi-search cursor-pointer"></i>
+                            </button>
+
+                            <button pButton
+                                    class=" mr-1 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+                                    *ngIf="user?.role == 'Admin' && tournament.status === 'WaitingForPlayers'" (click)="deleteTournament(tournament.id)">
+                                <i class="pi pi-trash cursor-pointer"></i>
+                            </button>
+
+                            <button class="border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" pButton *ngIf="tournament.canRegister && !tournament.isRegistered" (click)="subscribe(tournament.id)">
+                                <i class="pi pi-arrow-circle-right cursor-pointer"></i>
+                            </button>
+
+
+                            <button class="border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary" pButton *ngIf="tournament.isRegistered && tournament.status != 'Closed'" [disabled]="tournament.status == 'InProgress' " (click)="unsubscribe(tournament.id)">
+                                <i class="pi pi-arrow-circle-left cursor-pointer"></i>
+                            </button>
+
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator [totalRecords]="tournaments.total"></p-paginator>
+        </div>
     </ng-container>
 </div>
 

@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Tournament} from "../models/Tournament";
 import {environments} from "../../../environments/environments";
 import {TournamentIndex} from "../models/TournamentIndex";
-import {TournamentCategory} from "../enums/TournamentCategory";
 import {TournamentDetails} from "../models/TournamentDetails";
 import {TournamentAdd} from "../models/TournamentAdd";
-import {FormGroup} from "@angular/forms";
+import {User} from "../models/User";
 
 @Injectable({
     providedIn: 'root'
@@ -60,5 +58,21 @@ export class TournamentService {
 
     delete(tournamentId: string) {
         return this._httpClient.delete(`${environments.apiUrl}/Tournament/${tournamentId}`)
+    }
+
+    subscribeTournament(tournamentId: string, user: User | undefined) {
+        return this._httpClient.post(`${environments.apiUrl}/TournamentInscription/${tournamentId}`, tournamentId)
+    }
+
+    unsubscribeTournament(tournamentId: string) {
+        return this._httpClient.delete(`${environments.apiUrl}/TournamentInscription/${tournamentId}`)
+    }
+
+    start(tournamentId: string) {
+        return this._httpClient.patch(`${environments.apiUrl}/Tournament/${tournamentId}/start`, tournamentId)
+    }
+
+    nextRound(tournamentId: string) {
+        return this._httpClient.patch(`${environments.apiUrl}/Tournament/${tournamentId}/nextRound`, tournamentId)
     }
 }

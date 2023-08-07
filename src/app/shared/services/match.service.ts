@@ -12,13 +12,32 @@ export class MatchService {
     constructor(private _httpClient: HttpClient) {
     }
 
-    getMatch(tournamentId: string): Observable<Match[]> {
+    getMatch( params: {
+        tournamentId: string,
+        round?: number
+    }): Observable<Match[]> {
 
-        let params: HttpParams = new HttpParams()
+        let httpParams: HttpParams = new HttpParams()
 
-        params = params.set("tournamentId", tournamentId)
+        httpParams = httpParams.set("tournamentId", params.tournamentId)
+
+        if(params.round){
+            httpParams = httpParams.set("round", params.round)
+        }
 
         return this._httpClient.get<Match[]>(`${environments.apiUrl}/Match`, {params})
     }
 
+    resultMatch(matchId: number, matchResult: string ) {
+        console.log(matchId);
+        console.log(matchResult);
+
+        const body = { result: matchResult }; // Crée un objet JSON avec la propriété "result"
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        return this._httpClient.patch(`${environments.apiUrl}/Match/${matchId}/result`, body, { headers });
+    }
 }

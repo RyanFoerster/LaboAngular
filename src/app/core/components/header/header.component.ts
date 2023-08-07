@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ConfirmationService, ConfirmEventType, MenuItem, MessageService} from "primeng/api";
 import {SessionService} from "../../../shared/services/session.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-header',
@@ -58,7 +59,8 @@ export class HeaderComponent implements OnInit {
 
     constructor(private _sessionServ: SessionService,
                 private _confirmationService: ConfirmationService,
-                private _messagesService: MessageService) {
+                private _messagesService: MessageService,
+                private _router: Router) {
     }
 
     ngOnInit() {
@@ -111,6 +113,7 @@ export class HeaderComponent implements OnInit {
 
     onLogout() {
         this._sessionServ.removeFromSession()
+        this._router.navigateByUrl("/home")
     }
 
     confirm1() {

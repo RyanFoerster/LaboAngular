@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {registrationDateValidator} from "../../../shared/validators/registration-date-validator";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
 import {TournamentService} from "../../../shared/services/tournament.service";
@@ -78,6 +78,23 @@ export class TournamentAddComponent implements OnInit{
         })
     }
 
+    get categoryFormArray(): FormArray {
+        return this.addForm.get('categories') as FormArray;
+    }
+
+    updateCategories(event: any) {
+        const value = event.target.value;
+        if (event.target.checked) {
+            this.categoryFormArray.push(this._formBuilder.control(value));
+        } else {
+            const index = this.categoryFormArray.value.indexOf(value);
+            if (index >= 0) {
+                this.categoryFormArray.removeAt(index);
+            }
+        }
+    }
+
+
     ngOnInit() {
         this.animationState = true
         this.currentDate.setDate(this.currentDate.getDate() + 3)
@@ -89,7 +106,7 @@ export class TournamentAddComponent implements OnInit{
 
     addTournament() {
         if (this.addForm.valid) {
-            const date: Date = this.addForm.get('endOfRegistrationDate')?.value; // Obtenez la valeur de la date
+            console.log(this.addForm.value)
             const categoriesModified = this.addForm.get('categories')?.value
             const categoriesName: string[] = []
 
@@ -103,7 +120,6 @@ export class TournamentAddComponent implements OnInit{
                 categories: categoriesName
             });
             this._tournamentService.addTournament(this.addForm.value).subscribe(data => {
-                console.log(data)
                 this._router.navigateByUrl("/tournament/index")
             })
         }
