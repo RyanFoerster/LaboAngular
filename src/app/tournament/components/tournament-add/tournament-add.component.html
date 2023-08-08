@@ -59,7 +59,7 @@
             <div class="flex justify-content-between mb-5">
                 <div class="flex flex-column w-6">
                     <span class="p-float-label w-12">
-                        <p-inputNumber [style]="{width: '100%'}" id="eloMin" formControlName="eloMin"></p-inputNumber>
+                        <p-inputNumber class="w-12" [style]="{width: '100%'}" id="eloMin" formControlName="eloMin"></p-inputNumber>
                         <label for="eloMax">ELO minimum (0-3000)</label>
                     </span>
                     <small class="p-error" *ngIf="addForm.get('eloMin')?.errors?.['max']">Le champ ne doit pas
@@ -70,7 +70,7 @@
 
                 <div class="flex flex-column w-6">
                     <span class="p-float-label w-12">
-                        <p-inputNumber [style]="{width: '100%'}" id="eloMax" formControlName="eloMax"></p-inputNumber>
+                        <p-inputNumber class="w-12" [style]="{width: '100%'}" id="eloMax" formControlName="eloMax"></p-inputNumber>
                         <label for="eloMax">ELO maximum (0-3000)</label>
                     </span>
                     <small class="p-error" *ngIf="addForm.get('eloMax')?.errors?.['max']">Le champ ne doit pas

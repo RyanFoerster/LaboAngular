@@ -38,7 +38,7 @@ export class TournamentDetailsComponent implements OnInit {
     currentRound: number = 1
     animationState: boolean = false;
     matchResults: string[] = Object.values(MatchResult)
-    user!: User | undefined
+    user!: User | undefined;
 
     resultForm: FormGroup
 
@@ -78,7 +78,7 @@ export class TournamentDetailsComponent implements OnInit {
                 this.matches = data.matches
                 this.calculatePlayerStats()
 
-                if (this.matches) {
+                if (this.matches && this.tournamentItems?.length === 0) {
 
                     this.matches.forEach(match => {
                         this.tournamentItems?.push({
@@ -135,7 +135,7 @@ export class TournamentDetailsComponent implements OnInit {
                         this.playerStats[match.whiteId].wins++;
                     } else if (match.result === 'BlackWin') {
                         this.playerStats[match.whiteId].losses++;
-                    } else {
+                    } else if (match.result === 'Draw'){
                         this.playerStats[match.whiteId].draws++;
                     }
 
@@ -147,7 +147,7 @@ export class TournamentDetailsComponent implements OnInit {
                         this.playerStats[match.blackId].wins++;
                     } else if (match.result === 'WhiteWin') {
                         this.playerStats[match.blackId].losses++;
-                    } else {
+                    } else  if (match.result === 'Draw') {
                         this.playerStats[match.blackId].draws++;
                     }
                 }
@@ -156,16 +156,36 @@ export class TournamentDetailsComponent implements OnInit {
 
     }
 
-    onActiveIndexChange($event: number) {
+    onActiveIndexChange($event: number, tournament: TournamentDetails) {
         this.activeIndex = $event
 
-        this.currentRound = $event + 1
+        if(tournament.currentRound === 2){
+            this.currentRound = $event + 1
+        }
 
+        this.showSpinner = true
+        this._matchService.getMatch({tournamentId:tournament.id, round:this.activeIndex+1}).subscribe(data => {
+            this.match = data[0]
+            this.showSpinner = false
+        })
         this.calculatePlayerStats();
     }
 
     start(tournamentId: string) {
-        this._tournamentService.start(tournamentId).subscribe()
+        this._tournamentService.start(tournamentId).pipe(
+            tap(() => {
+                this.showSpinner = true
+                this._matchService.getMatch({
+                    tournamentId,
+                    round: this.currentRound
+                }).subscribe(data => {
+                    this.match = data[0]
+
+                })
+            }),
+            delay(1000),
+            tap(() => this.showSpinner = false)
+        ).subscribe()
     }
 
     calculateTotalScore(playerId: string): number {
@@ -195,17 +215,17 @@ export class TournamentDetailsComponent implements OnInit {
         let result = this.resultForm.get('result')?.value
         this._matchService.resultMatch(matchId, result).pipe(
             tap(() => {
-                let tournamentId = this._activatedRoute.snapshot.params['id']
-                this.showSpinner = true
-                this._matchService.getMatch({
-                    tournamentId,
-                    round: this.currentRound
-                }).subscribe(data => {
-                    this.match = data[0]
-                })
-            }),
-            delay(1000),
-            tap(() => this.showSpinner = false)
+                if(this.currentRound < 2){
+                    let tournamentId = this._activatedRoute.snapshot.params['id']
+                    this._matchService.getMatch({
+                        tournamentId,
+                        round: this.currentRound
+                    }).subscribe(data => {
+                        console.log(data)
+                        this.match = data[0]
+                    })
+                }
+            })
         ).subscribe()
 
     }
@@ -213,14 +233,18 @@ export class TournamentDetailsComponent implements OnInit {
     nextRound(tournamentId: string) {
         this._tournamentService.nextRound(tournamentId).pipe(
             tap(data => {
-                console.log(data)
-                this.currentRound++
+                if(this.currentRound < 2){
+                    this.currentRound++
+                    this.activeIndex++
+                }
+
                 this.showSpinner = true
                 this._matchService.getMatch({
                     tournamentId,
                     round: this.currentRound
                 }).subscribe(data => {
                     this.match = data[0]
+
                 })
             }),
             delay(1000),

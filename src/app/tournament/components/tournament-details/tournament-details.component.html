@@ -4,7 +4,7 @@
 
         <p-card *ngIf="!tournament.canStart && match" class="p-5">
             <p-steps [model]="tournamentItems" [readonly]="false" [activeIndex]="activeIndex"
-                     (activeIndexChange)="onActiveIndexChange($event)"></p-steps>
+                     (activeIndexChange)="onActiveIndexChange($event, tournament)"></p-steps>
         </p-card>
         <div [@pageAnimation]="animationState ? 'in' : 'out'" class="w-12 flex flex-column">
             <p-panel *ngIf="tournament" [style]="{width: '100%'}">
@@ -31,13 +31,13 @@
                         <tr *ngIf="match">
                             <td>{{ getPlayerPosition(player.id, currentRound) }}</td>
                             <td>{{ player.username }}</td>
-                            <td>{{ match.result !== 'NotPlayed' ? currentRound : 0 }}</td>
-                            <td>{{ match.result !== 'NotPlayed' ? playerStats[player.id].wins || 0 : 0 }}</td>
-                            <td>{{ match.result !== 'NotPlayed' ? playerStats[player.id].losses || 0 : 0 }}</td>
-                            <td>{{ match.result !== 'NotPlayed' ? playerStats[player.id].draws || 0 : 0 }}</td>
-                            <td>{{ match.result !== 'NotPlayed' ? calculateTotalScore(player.id) : 0 }}</td>
+                            <td>{{ match.result !== 'NotPlayed' ? currentRound : currentRound-1 }}</td>
+                            <td>{{  playerStats[player.id].wins }}</td>
+                            <td>{{ playerStats[player.id].losses }}</td>
+                            <td>{{ playerStats[player.id].draws }}</td>
+                            <td>{{ calculateTotalScore(player.id) }}</td>
                         </tr>
-                        <tr *ngIf="!match">
+                        <tr *ngIf="!match && tournament.currentRound < 2">
                             <td>1</td>
                             <td>{{ player.username }}</td>
                             <td>0</td>
@@ -53,26 +53,27 @@
                     <p-button routerLink="/tournament/index" label="Retour à l'index"></p-button>
                 </ng-template>
             </p-panel>
-            <p-card *ngIf="tournament.matches && tournament.players && tournament.players.length >= 2" [style]="{width: '50%'}" class="mt-5 flex justify-content-end">
+            <p-card *ngIf="tournament.matches && tournament.players && tournament.players.length >= 2 && !tournament.canStart" [style]="{width: '50%'}" class="mt-5 flex justify-content-end">
 
-                <div class="flex justify-content-between align-items-center">
-                    <p class="w-3">{{ tournament.matches[currentRound - 1].whiteName }}</p>
+                <div *ngIf="match" class="flex justify-content-between align-items-center">
+                    <p class="w-3">{{ match.whiteName }}</p>
                     <p class="w-3">VS</p>
-                    <p class="w-3">{{ tournament.matches[currentRound - 1].blackName }}</p>
+                    <p class="w-3">{{ match.blackName }}</p>
 
                     <form [formGroup]="resultForm">
-                        <p-dropdown class="w-3" [disabled]="tournament.status === 'Closed' && match.result !== 'NotPlayed'" [style]="{width: '100%'}"
+                        <p-dropdown class="w-3" *ngIf="tournament.status !== 'Closed'"  [style]="{width: '100%'}"
                                     formControlName="result" [options]="matchResults"
-                                    [placeholder]="match.result" (onChange)="resultFormSubmit(match.id)"></p-dropdown>
+                                    [placeholder]="matchResults[0]" (onChange)="resultFormSubmit(match.id)">
+                        </p-dropdown>
                     </form>
 
                 </div>
-                <p-button *ngIf="match.round > currentRound" label="Sauvegarder" (click)="nextRound(tournament.id)"></p-button>
+                <p-button *ngIf="tournament.status !== 'Closed' && !tournament.canStart"  label="Sauvegarder" (click)="nextRound(tournament.id)"></p-button>
 
             </p-card>
         </div>
 
-        <p-button class="" [style]="{marginTop: '15px'}" *ngIf="tournament.players && tournament.canStart && user?.role == 'Admin'" label="Démarrer"
+        <p-button class="" [style]="{marginTop: '15px'}" *ngIf="tournament.players && tournament.canStart && user?.role === 'Admin'" label="Démarrer"
                   [disabled]="tournament.players.length < tournament.minPlayers"
                   (onClick)="start(tournament.id)"></p-button>
     </ng-container>

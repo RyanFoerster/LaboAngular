@@ -1,7 +1,7 @@
 
 <div class="m-5" >
     <button pButton
-            class="p-2 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+            class="p-3 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
             routerLink="/tournament/add" *ngIf="user?.role === 'Admin'">Nouveau
     </button>
 </div>
@@ -51,9 +51,17 @@
         </form>
     </div>
     <p-progressSpinner *ngIf="showSpinner" class="flex justify-content-center align-items-center"></p-progressSpinner>
-    <ng-container *ngIf="tournamentsSub$ | async as tournaments">
+    <ng-container>
         <div *ngIf="!showSpinner">
-            <p-table *ngIf="tournaments.results as results" [value]="results" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table [paginator]="true"
+                     [rows]="10"
+                     paginatorPosition="both"
+                     [lazy]="true"
+                     (onLazyLoad)="loadProducts($event)"
+                     [totalRecords]="totalRecords"
+                     (onPage)="onPagesChange($event)"
+                     [tableStyle]="{ 'min-width': '50rem' }" *ngIf="tournaments" [value]="tournaments" >
+
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Nom</th>
@@ -83,13 +91,15 @@
                     </span>
                             /{{ tournament.maxPlayers }}
                         </td>
-                        <td>
+                        <td class="flex ">
 
                             <button pButton
                                     class="mr-1 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
                                     routerLink="/tournament/details/{{tournament.id}}">
                                 <i class="pi pi-search cursor-pointer"></i>
                             </button>
+
+
 
                             <button pButton
                                     class=" mr-1 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
@@ -110,7 +120,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-            <p-paginator [totalRecords]="tournaments.total"></p-paginator>
         </div>
     </ng-container>
 </div>

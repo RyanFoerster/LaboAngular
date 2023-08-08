@@ -3,6 +3,7 @@ import {NgModule} from "@angular/core";
 import {TournamentIndexComponent} from "./components/tournament-index/tournament-index.component";
 import {TournamentDetailsComponent} from "./components/tournament-details/tournament-details.component";
 import {TournamentAddComponent} from "./components/tournament-add/tournament-add.component";
+import {adminGuard} from "../guards/admin.guard";
 
 const routes: Routes = [
     {
@@ -15,7 +16,8 @@ const routes: Routes = [
     },
     {
         path: 'add',
-        component: TournamentAddComponent
+        component: TournamentAddComponent,
+        canActivate: [adminGuard]
     }
 ];
 

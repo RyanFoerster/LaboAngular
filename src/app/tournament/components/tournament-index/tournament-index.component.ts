@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Tournament} from "../../../shared/models/Tournament";
 import {TournamentService} from "../../../shared/services/tournament.service";
 import {delay, Observable, tap} from "rxjs";
 import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
@@ -9,8 +8,10 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {SessionService} from "../../../shared/services/session.service";
 import {User} from "../../../shared/models/User";
 import {animate, style, transition, trigger} from "@angular/animations";
-import {TournamentDetails} from "../../../shared/models/TournamentDetails";
 import {Router} from "@angular/router";
+import {TableLazyLoadEvent, TablePageEvent} from "primeng/table";
+import {Tournament} from "../../../shared/models/Tournament";
+
 
 @Component({
     selector: 'app-tournament-index',
@@ -34,6 +35,7 @@ export class TournamentIndexComponent implements OnInit {
     tournamentCategories = this.enumToDropdownOptions(TournamentCategory);
     tournamentStatus = this.enumToDropdownOptions(TournamentStatus)
     showSpinner: boolean = false
+    tournaments: Tournament[] | undefined = []
 
     searchForm: FormGroup
     showSearchForm!: boolean;
@@ -41,6 +43,9 @@ export class TournamentIndexComponent implements OnInit {
     animationState: boolean = false;
 
     user?: User
+
+    totalRecords: number = 10
+
 
     constructor(private _tournamentService: TournamentService,
                 private _formBuilder: FormBuilder,
@@ -56,6 +61,22 @@ export class TournamentIndexComponent implements OnInit {
 
     }
 
+    loadProducts($event: TableLazyLoadEvent) {
+        let offset = $event.first
+        this._tournamentService.getTournaments({
+            offset,
+            name: undefined,
+            category: undefined,
+            status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
+            womenOnly: false
+        }).pipe(
+            tap(data => {
+                this.totalRecords = data.total
+                this.tournaments = data.results
+            })
+        ).subscribe()
+    }
+
     ngOnInit() {
 
         this.animationState = true
@@ -64,13 +85,19 @@ export class TournamentIndexComponent implements OnInit {
             this.user = this._sessionService.getToken()?.user
         }
 
-        this.tournamentsSub$ = this._tournamentService.getTournaments({
-            offset: undefined,
+        this._tournamentService.getTournaments({
+            offset: 0,
             name: undefined,
             category: undefined,
             status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
-            womenOnly: undefined
-        })
+            womenOnly: false
+        }).pipe(
+            tap(data => {
+
+                this.tournaments = data.results
+                this.totalRecords = data.total
+            })
+        ).subscribe()
 
     }
 
@@ -173,4 +200,20 @@ export class TournamentIndexComponent implements OnInit {
             tap(() => this.showSpinner = false)
         ).subscribe()
     }
+
+    onPagesChange($event: TablePageEvent) {
+        const offset = $event.first
+
+        this.tournamentsSub$ = this._tournamentService.getTournaments({
+            offset,
+            name: undefined,
+            category: undefined,
+            status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
+            womenOnly: undefined
+        })
+    }
+
+    protected readonly parseInt = parseInt;
+
+
 }
