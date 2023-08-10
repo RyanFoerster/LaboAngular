@@ -18,7 +18,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { NgIf, NgClass, DatePipe } from '@angular/common';
+import {NgIf, NgClass, DatePipe, AsyncPipe} from '@angular/common';
 
 
 @Component({
@@ -52,6 +52,7 @@ import { NgIf, NgClass, DatePipe } from '@angular/common';
         SharedModule,
         NgClass,
         DatePipe,
+        AsyncPipe,
     ],
 })
 export class TournamentIndexComponent implements OnInit {
@@ -60,7 +61,6 @@ export class TournamentIndexComponent implements OnInit {
     tournamentCategories = this.enumToDropdownOptions(TournamentCategory);
     tournamentStatus = this.enumToDropdownOptions(TournamentStatus)
     showSpinner: boolean = false
-    tournaments: Tournament[] | undefined = []
 
     searchForm: FormGroup
     showSearchForm!: boolean;
@@ -88,7 +88,7 @@ export class TournamentIndexComponent implements OnInit {
 
     loadProducts($event: TableLazyLoadEvent) {
         let offset = $event.first
-        this._tournamentService.getTournaments({
+        this.tournamentsSub$ = this._tournamentService.getTournaments({
             offset,
             name: undefined,
             category: undefined,
@@ -97,9 +97,8 @@ export class TournamentIndexComponent implements OnInit {
         }).pipe(
             tap(data => {
                 this.totalRecords = data.total
-                this.tournaments = data.results
             })
-        ).subscribe()
+        )
     }
 
     ngOnInit() {
@@ -110,7 +109,7 @@ export class TournamentIndexComponent implements OnInit {
             this.user = this._sessionService.getToken()?.user
         }
 
-        this._tournamentService.getTournaments({
+        this.tournamentsSub$ = this._tournamentService.getTournaments({
             offset: 0,
             name: undefined,
             category: undefined,
@@ -118,11 +117,9 @@ export class TournamentIndexComponent implements OnInit {
             womenOnly: false
         }).pipe(
             tap(data => {
-
-                this.tournaments = data.results
                 this.totalRecords = data.total
             })
-        ).subscribe()
+        )
 
     }
 

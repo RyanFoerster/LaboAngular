@@ -51,16 +51,11 @@
         </form>
     </div>
     <p-progressSpinner *ngIf="showSpinner" class="flex justify-content-center align-items-center"></p-progressSpinner>
-    <ng-container>
+    <ng-container *ngIf="tournamentsSub$ | async as tournaments">
         <div *ngIf="!showSpinner">
-            <p-table [paginator]="true"
-                     [rows]="10"
-                     paginatorPosition="both"
-                     [lazy]="true"
-                     (onLazyLoad)="loadProducts($event)"
-                     [totalRecords]="totalRecords"
-                     (onPage)="onPagesChange($event)"
-                     [tableStyle]="{ 'min-width': '50rem' }" *ngIf="tournaments" [value]="tournaments" >
+            <p-table [tableStyle]="{ 'min-width': '50rem' }"
+                     *ngIf="tournaments.results"
+                     [value]="tournaments.results" >
 
                 <ng-template pTemplate="header">
                     <tr>
@@ -123,6 +118,5 @@
         </div>
     </ng-container>
 </div>
-
 
 
