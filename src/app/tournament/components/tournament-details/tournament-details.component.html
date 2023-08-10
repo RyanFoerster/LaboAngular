@@ -11,7 +11,6 @@
                 <ng-template pTemplate="header">
                     <span class="text-primary font-semibold text-xl">
                         {{tournament.name}}
-                        {{tournament.matches?.length}}
                     </span>
                 </ng-template>
                 <p-table *ngIf="tournament.players" [tableStyle]="{ 'min-width': '50rem' }"

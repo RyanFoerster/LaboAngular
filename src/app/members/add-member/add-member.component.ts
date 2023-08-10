@@ -1,10 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {UserGender} from "../../shared/enums/UserGender";
 import {MemberService} from "../../shared/services/member.service";
 import {HttpClient} from "@angular/common/http";
 import {environments} from "../../../environments/environments";
 import {animate, style, transition, trigger} from "@angular/animations";
+import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CalendarModule } from 'primeng/calendar';
+import { NgIf, NgFor } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-add-member',
@@ -13,13 +20,26 @@ import {animate, style, transition, trigger} from "@angular/animations";
     animations: [
         trigger('pageAnimation', [
             transition(':enter', [
-                style({opacity: 0}),
-                animate('300ms', style({opacity: 1})),
+                style({ opacity: 0 }),
+                animate('300ms', style({ opacity: 1 })),
             ]),
             transition(':leave', [
-                animate('300ms', style({opacity: 0})),
+                animate('300ms', style({ opacity: 0 })),
             ]),
         ]),
+    ],
+    standalone: true,
+    imports: [
+        CardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        NgIf,
+        CalendarModule,
+        InputNumberModule,
+        NgFor,
+        RadioButtonModule,
+        ButtonModule,
     ],
 })
 export class AddMemberComponent implements OnInit {

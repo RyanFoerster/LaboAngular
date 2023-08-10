@@ -1,13 +1,20 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {AuthService} from "../shared/services/auth.service";
 import {Router} from "@angular/router";
 import {SessionService} from "../shared/services/session.service";
+import { ButtonModule } from 'primeng/button';
+import { PasswordModule } from 'primeng/password';
+import { NgIf } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
+    standalone: true,
+    imports: [CardModule, FormsModule, ReactiveFormsModule, InputTextModule, NgIf, PasswordModule, ButtonModule]
 })
 export class LoginComponent {
     loginForm: FormGroup

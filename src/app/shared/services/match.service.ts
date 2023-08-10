@@ -4,9 +4,7 @@ import {Observable} from "rxjs";
 import {Match} from "../models/Match";
 import {environments} from "../../../environments/environments";
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class MatchService {
 
     constructor(private _httpClient: HttpClient) {

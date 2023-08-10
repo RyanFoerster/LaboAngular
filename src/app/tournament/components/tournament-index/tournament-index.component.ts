@@ -4,13 +4,21 @@ import {delay, Observable, tap} from "rxjs";
 import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
 import {TournamentIndex} from "../../../shared/models/TournamentIndex";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {SessionService} from "../../../shared/services/session.service";
 import {User} from "../../../shared/models/User";
 import {animate, style, transition, trigger} from "@angular/animations";
-import {Router} from "@angular/router";
-import {TableLazyLoadEvent, TablePageEvent} from "primeng/table";
+import { Router, RouterLink } from "@angular/router";
+import { TableLazyLoadEvent, TablePageEvent, TableModule } from "primeng/table";
 import {Tournament} from "../../../shared/models/Tournament";
+import { SharedModule } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { NgIf, NgClass, DatePipe } from '@angular/common';
 
 
 @Component({
@@ -20,13 +28,30 @@ import {Tournament} from "../../../shared/models/Tournament";
     animations: [
         trigger('pageAnimation', [
             transition(':enter', [
-                style({opacity: 0}),
-                animate('500ms', style({opacity: 1})),
+                style({ opacity: 0 }),
+                animate('500ms', style({ opacity: 1 })),
             ]),
             transition(':leave', [
-                animate('500ms', style({opacity: 0})),
+                animate('500ms', style({ opacity: 0 })),
             ]),
         ]),
+    ],
+    standalone: true,
+    imports: [
+        NgIf,
+        ButtonModule,
+        RouterLink,
+        FormsModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        DropdownModule,
+        MultiSelectModule,
+        InputSwitchModule,
+        ProgressSpinnerModule,
+        TableModule,
+        SharedModule,
+        NgClass,
+        DatePipe,
     ],
 })
 export class TournamentIndexComponent implements OnInit {

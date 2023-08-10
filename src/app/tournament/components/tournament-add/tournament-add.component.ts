@@ -1,25 +1,47 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {registrationDateValidator} from "../../../shared/validators/registration-date-validator";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
 import {TournamentService} from "../../../shared/services/tournament.service";
-import {Router} from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import {animate, style, transition, trigger} from "@angular/animations";
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CalendarModule } from 'primeng/calendar';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { NgIf } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-tournament-add',
-  templateUrl: './tournament-add.component.html',
-  styleUrls: ['./tournament-add.component.scss'],
+    selector: 'app-tournament-add',
+    templateUrl: './tournament-add.component.html',
+    styleUrls: ['./tournament-add.component.scss'],
     animations: [
         trigger('pageAnimation', [
             transition(':enter', [
-                style({opacity: 0}),
-                animate('300ms', style({opacity: 1})),
+                style({ opacity: 0 }),
+                animate('300ms', style({ opacity: 1 })),
             ]),
             transition(':leave', [
-                animate('300ms', style({opacity: 0})),
+                animate('300ms', style({ opacity: 0 })),
             ]),
         ]),
+    ],
+    standalone: true,
+    imports: [
+        ButtonModule,
+        RouterLink,
+        CardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        NgIf,
+        InputNumberModule,
+        MultiSelectModule,
+        CalendarModule,
+        InputSwitchModule,
     ],
 })
 export class TournamentAddComponent implements OnInit{

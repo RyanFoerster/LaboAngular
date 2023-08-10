@@ -1,16 +1,26 @@
 import {Component, OnInit} from '@angular/core';
 import {TournamentService} from "../../../shared/services/tournament.service";
 import {TournamentDetails} from "../../../shared/models/TournamentDetails";
-import {ActivatedRoute} from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import {delay, Observable, startWith, take, tap} from "rxjs";
 import {Match} from "../../../shared/models/Match";
-import {MenuItem} from "primeng/api";
+import { MenuItem, SharedModule } from "primeng/api";
 import {animate, style, transition, trigger} from "@angular/animations";
 import {MatchService} from "../../../shared/services/match.service";
 import {MatchResult} from "../../../shared/enums/MatchResult";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {User} from "../../../shared/models/User";
 import {SessionService} from "../../../shared/services/session.service";
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { PanelModule } from 'primeng/panel';
+import { StepsModule } from 'primeng/steps';
+import { CardModule } from 'primeng/card';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { NgIf, AsyncPipe } from '@angular/common';
+import {Title} from "@angular/platform-browser";
+import {Tournament} from "../../../shared/models/Tournament";
 
 @Component({
     selector: 'app-tournament-details',
@@ -19,13 +29,29 @@ import {SessionService} from "../../../shared/services/session.service";
     animations: [
         trigger('pageAnimation', [
             transition(':enter', [
-                style({opacity: 0}),
-                animate('500ms', style({opacity: 1})),
+                style({ opacity: 0 }),
+                animate('500ms', style({ opacity: 1 })),
             ]),
             transition(':leave', [
-                animate('500ms', style({opacity: 0})),
+                animate('500ms', style({ opacity: 0 })),
             ]),
         ]),
+    ],
+    standalone: true,
+    imports: [
+        NgIf,
+        ProgressSpinnerModule,
+        CardModule,
+        StepsModule,
+        PanelModule,
+        SharedModule,
+        TableModule,
+        ButtonModule,
+        RouterLink,
+        FormsModule,
+        ReactiveFormsModule,
+        DropdownModule,
+        AsyncPipe,
     ],
 })
 export class TournamentDetailsComponent implements OnInit {
@@ -50,7 +76,8 @@ export class TournamentDetailsComponent implements OnInit {
                 private _activatedRoute: ActivatedRoute,
                 private _matchService: MatchService,
                 private _formBuilder: FormBuilder,
-                private _sessionService: SessionService) {
+                private _sessionService: SessionService,
+                private _title: Title) {
 
         this.resultForm = this._formBuilder.group({
             result: [null]
@@ -59,6 +86,19 @@ export class TournamentDetailsComponent implements OnInit {
         if(this._sessionService.getToken()){
             this.user = this._sessionService.getToken()?.user
         }
+    }
+
+    initTitle(tournament: TournamentDetails | undefined){
+        if(!tournament){
+            this._title.setTitle('Tournament not found')
+            return
+        }
+
+        if (tournament.name != null) {
+            this._title.setTitle(tournament.name)
+        }
+
+
     }
 
     ngOnInit() {
@@ -76,6 +116,7 @@ export class TournamentDetailsComponent implements OnInit {
         this.tournamentSub = this._tournamentService.getOneTournament(tournamentId).pipe(
             tap(data => {
                 this.matches = data.matches
+                this.initTitle(data)
                 this.calculatePlayerStats()
 
                 if (this.matches && this.tournamentItems?.length === 0) {

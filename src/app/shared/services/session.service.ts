@@ -2,9 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Token} from "../models/Token";
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SessionService {
 
     private _tokenSubject: BehaviorSubject<Token | null>

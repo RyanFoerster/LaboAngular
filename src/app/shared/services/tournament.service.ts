@@ -7,9 +7,7 @@ import {TournamentDetails} from "../models/TournamentDetails";
 import {TournamentAdd} from "../models/TournamentAdd";
 import {User} from "../models/User";
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class TournamentService {
 
     constructor(private _httpClient: HttpClient) {

@@ -16,6 +16,7 @@ import {animate, style, transition, trigger} from "@angular/animations";
             ]),
         ]),
     ],
+    standalone: true,
 })
 export class HomeComponent implements OnInit {
 

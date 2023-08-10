@@ -5,9 +5,7 @@ import {Observable} from "rxjs";
 import {environments} from "../../../environments/environments";
 import {ChangePassword} from "../models/ChangePassword";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MemberService {
 
   constructor(private _httpClient: HttpClient) {

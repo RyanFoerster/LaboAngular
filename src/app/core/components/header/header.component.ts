@@ -1,13 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import {ConfirmationService, ConfirmEventType, MenuItem, MessageService} from "primeng/api";
+import { ConfirmationService, ConfirmEventType, MenuItem, MessageService, SharedModule } from "primeng/api";
 import {SessionService} from "../../../shared/services/session.service";
 import {Router} from "@angular/router";
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { SlideMenuModule } from 'primeng/slidemenu';
+import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: true,
+    imports: [NgIf, ProgressSpinnerModule, ButtonModule, SlideMenuModule, TabMenuModule, ToastModule, ConfirmDialogModule, SharedModule]
 })
 export class HeaderComponent implements OnInit {
 

@@ -1,8 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {strongPassword} from "../../shared/validators/password-validator";
 import {MemberService} from "../../shared/services/member.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import { ButtonModule } from 'primeng/button';
+import { NgIf } from '@angular/common';
+import { PasswordModule } from 'primeng/password';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-change-password',
@@ -11,13 +15,22 @@ import {animate, style, transition, trigger} from "@angular/animations";
     animations: [
         trigger('pageAnimation', [
             transition(':enter', [
-                style({opacity: 0}),
-                animate('300ms', style({opacity: 1})),
+                style({ opacity: 0 }),
+                animate('300ms', style({ opacity: 1 })),
             ]),
             transition(':leave', [
-                animate('300ms', style({opacity: 0})),
+                animate('300ms', style({ opacity: 0 })),
             ]),
         ]),
+    ],
+    standalone: true,
+    imports: [
+        CardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PasswordModule,
+        NgIf,
+        ButtonModule,
     ],
 })
 export class ChangePasswordComponent implements OnInit{
