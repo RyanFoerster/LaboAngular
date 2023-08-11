@@ -12,6 +12,7 @@ export interface Tournament {
   categories?: TournamentCategory[]
   womenOnly: boolean
   endOfRegistration: string
+  endOfRegistrationDate: string
   count: number
   canRegister: boolean
   isRegistered: boolean

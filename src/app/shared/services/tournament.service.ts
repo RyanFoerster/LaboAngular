@@ -58,7 +58,7 @@ export class TournamentService {
         return this._httpClient.delete(`${environments.apiUrl}/Tournament/${tournamentId}`)
     }
 
-    subscribeTournament(tournamentId: string, user: User | undefined) {
+    subscribeTournament(tournamentId: string) {
         return this._httpClient.post(`${environments.apiUrl}/TournamentInscription/${tournamentId}`, tournamentId)
     }
 

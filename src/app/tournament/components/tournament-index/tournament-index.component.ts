@@ -4,21 +4,21 @@ import {delay, Observable, tap} from "rxjs";
 import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
 import {TournamentIndex} from "../../../shared/models/TournamentIndex";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SessionService} from "../../../shared/services/session.service";
 import {User} from "../../../shared/models/User";
 import {animate, style, transition, trigger} from "@angular/animations";
-import { Router, RouterLink } from "@angular/router";
-import { TableLazyLoadEvent, TablePageEvent, TableModule } from "primeng/table";
-import {Tournament} from "../../../shared/models/Tournament";
-import { SharedModule } from 'primeng/api';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import {NgIf, NgClass, DatePipe, AsyncPipe} from '@angular/common';
+import {Router, RouterLink} from "@angular/router";
+import {TableLazyLoadEvent, TableModule, TablePageEvent} from "primeng/table";
+import {SharedModule} from 'primeng/api';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {DropdownModule} from 'primeng/dropdown';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
+import {AsyncPipe, DatePipe, NgClass, NgIf} from '@angular/common';
+import {PaginatorModule, PaginatorState} from "primeng/paginator";
 
 
 @Component({
@@ -53,6 +53,7 @@ import {NgIf, NgClass, DatePipe, AsyncPipe} from '@angular/common';
         NgClass,
         DatePipe,
         AsyncPipe,
+        PaginatorModule
     ],
 })
 export class TournamentIndexComponent implements OnInit {
@@ -186,7 +187,7 @@ export class TournamentIndexComponent implements OnInit {
 
     subscribe(tournamentId: string) {
 
-        this._tournamentService.subscribeTournament(tournamentId, this.user).pipe(
+        this._tournamentService.subscribeTournament(tournamentId).pipe(
             tap(() => {
                 this.showSpinner = true
                 this.tournamentsSub$ = this._tournamentService.getTournaments({
@@ -223,7 +224,7 @@ export class TournamentIndexComponent implements OnInit {
         ).subscribe()
     }
 
-    onPagesChange($event: TablePageEvent) {
+    onPagesChange($event: PaginatorState) {
         const offset = $event.first
 
         this.tournamentsSub$ = this._tournamentService.getTournaments({
@@ -232,10 +233,10 @@ export class TournamentIndexComponent implements OnInit {
             category: undefined,
             status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
             womenOnly: undefined
-        })
+        }).pipe(
+            tap(() => this.showSpinner = true),
+            delay(1000),
+            tap(() => this.showSpinner = false)
+        )
     }
-
-    protected readonly parseInt = parseInt;
-
-
 }
