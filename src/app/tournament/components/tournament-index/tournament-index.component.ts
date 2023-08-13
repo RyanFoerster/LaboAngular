@@ -87,21 +87,6 @@ export class TournamentIndexComponent implements OnInit {
 
     }
 
-    loadProducts($event: TableLazyLoadEvent) {
-        let offset = $event.first
-        this.tournamentsSub$ = this._tournamentService.getTournaments({
-            offset,
-            name: undefined,
-            category: undefined,
-            status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
-            womenOnly: false
-        }).pipe(
-            tap(data => {
-                this.totalRecords = data.total
-            })
-        )
-    }
-
     ngOnInit() {
 
         this.animationState = true
@@ -155,8 +140,8 @@ export class TournamentIndexComponent implements OnInit {
     }
 
     onReset() {
-        console.log("reset")
         this.searchForm.reset();
+        this.refreshTournaments()
     }
 
     toggleShowForm() {
@@ -165,63 +150,36 @@ export class TournamentIndexComponent implements OnInit {
 
     deleteTournament(tournamentId: string) {
         this._tournamentService.delete(tournamentId).subscribe(() => {
-            this.tournamentsSub$ = this._tournamentService.getTournaments({
-                offset: undefined,
-                name: undefined,
-                category: undefined,
-                status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
-                womenOnly: undefined
-            }).pipe(
-                tap(() => {
-                    this.showSpinner = true
-                }),
-                delay(1000),
-                tap(() => {
-                    this.showSpinner = false
-                    this._router.navigateByUrl("/tournament/index")
-                })
-            )
-        })
+            this.refreshTournaments();
+            this._router.navigateByUrl("/tournament/index");
+        });
     }
 
-
     subscribe(tournamentId: string) {
-
-        this._tournamentService.subscribeTournament(tournamentId).pipe(
-            tap(() => {
-                this.showSpinner = true
-                this.tournamentsSub$ = this._tournamentService.getTournaments({
-                    offset: undefined,
-                    name: undefined,
-                    category: undefined,
-                    status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
-                    womenOnly: undefined
-                })
-
-            }),
-            delay(1000),
-            tap(() => {
-                this.showSpinner = false
-                this._router.navigateByUrl("/tournament/index")
-            })
-        ).subscribe()
+        this._tournamentService.subscribeTournament(tournamentId).subscribe(() => {
+            this.refreshTournaments();
+            this._router.navigateByUrl("/tournament/index");
+        });
     }
 
     unsubscribe(tournamentId: string) {
-        this._tournamentService.unsubscribeTournament(tournamentId).pipe(
-            tap(() => {
-                this.showSpinner = true
-                this.tournamentsSub$ = this._tournamentService.getTournaments({
-                    offset: undefined,
-                    name: undefined,
-                    category: undefined,
-                    status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
-                    womenOnly: undefined
-                })
-            }),
+        this._tournamentService.unsubscribeTournament(tournamentId).subscribe(() => {
+            this.refreshTournaments();
+        });
+    }
+
+    private refreshTournaments(offset?: number) {
+        this.showSpinner = true;
+        this.tournamentsSub$ = this._tournamentService.getTournaments({
+            offset,
+            name: undefined,
+            category: undefined,
+            status: [TournamentStatus.C, TournamentStatus.I, TournamentStatus.W],
+            womenOnly: undefined
+        }).pipe(
             delay(1000),
             tap(() => this.showSpinner = false)
-        ).subscribe()
+        );
     }
 
     onPagesChange($event: PaginatorState) {

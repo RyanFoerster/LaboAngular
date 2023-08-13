@@ -99,7 +99,7 @@
 
 
                             <button pButton
-                                    class=" mr-1 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
+                                    class="mr-1 border-none bg-primary border-1 border-black-alpha-80 border-round-md cursor-pointer hover:bg-gray-800 hover:text-primary hover:border-primary"
                                     *ngIf="user?.role == 'Admin' && tournament.status === 'WaitingForPlayers'" (click)="deleteTournament(tournament.id)">
                                 <i class="pi pi-trash cursor-pointer"></i>
                             </button>
