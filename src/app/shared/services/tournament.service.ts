@@ -5,7 +5,6 @@ import {environments} from "../../../environments/environments";
 import {TournamentIndex} from "../models/TournamentIndex";
 import {TournamentDetails} from "../models/TournamentDetails";
 import {TournamentAdd} from "../models/TournamentAdd";
-import {User} from "../models/User";
 
 @Injectable()
 export class TournamentService {

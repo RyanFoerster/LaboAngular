@@ -1,21 +1,22 @@
-<p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
-<div *ngIf="!showSpinner">
-    <ng-container class="w-5" *ngIf="tournamentSub | async as tournament">
+<p-progressSpinner *ngIf="showSpinner"></p-progressSpinner> <!-- Affiche un spinner de chargement si showSpinner est vrai -->
+<div *ngIf="!showSpinner"> <!-- Affiche le contenu si showSpinner est faux -->
+    <ng-container class="w-5" *ngIf="tournamentSub | async as tournament"> <!-- Utilise un conteneur Angular pour afficher le contenu de tournamentSub s'il est disponible -->
 
-        <p-card *ngIf="!tournament.canStart && match" class="p-5">
+        <p-card *ngIf="!tournament.canStart && match" class="p-5"> <!-- Affiche une carte si le tournoi ne peut pas commencer et qu'il y a un match -->
             <p-steps [model]="tournamentItems" [readonly]="false" [activeIndex]="activeIndex"
-                     (activeIndexChange)="onActiveIndexChange($event, tournament)"></p-steps>
+                     (activeIndexChange)="onActiveIndexChange($event, tournament)"></p-steps> <!-- Affiche une barre de progression pour les étapes du tournoi -->
         </p-card>
-        <div [@pageAnimation]="animationState ? 'in' : 'out'" class="w-12 flex flex-column">
-            <p-panel *ngIf="tournament" [style]="{width: '100%'}">
-                <ng-template pTemplate="header">
+        <div [@pageAnimation]="animationState ? 'in' : 'out'" class="w-12 flex flex-column"> <!-- Applique une animation de transition en fonction de l'état de l'animation -->
+
+            <p-panel *ngIf="tournament" [style]="{width: '100%'}"> <!-- Affiche un panneau si le tournoi est disponible -->
+                <ng-template pTemplate="header"> <!-- Utilise un modèle pour afficher l'en-tête du panneau -->
                     <span class="text-primary font-semibold text-xl">
-                        {{tournament.name}}
+                        {{tournament.name}} <!-- Affiche le nom du tournoi -->
                     </span>
                 </ng-template>
                 <p-table *ngIf="tournament.players" [tableStyle]="{ 'min-width': '50rem' }"
-                         [value]="tournament.players">
-                    <ng-template pTemplate="header">
+                         [value]="tournament.players"> <!-- Affiche un tableau si les joueurs du tournoi sont disponibles -->
+                    <ng-template pTemplate="header"> <!-- Utilise un modèle pour afficher l'en-tête du tableau -->
                         <tr>
                             <th>Position</th>
                             <th>Nom</th>
@@ -26,17 +27,17 @@
                             <th>Score</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-player let-i="index">
-                        <tr *ngIf="match">
-                            <td>{{ getPlayerPosition(player.id, currentRound) }}</td>
-                            <td>{{ player.username }}</td>
-                            <td>{{ match.result !== 'NotPlayed' ? currentRound : currentRound-1 }}</td>
-                            <td>{{  playerStats[player.id].wins }}</td>
-                            <td>{{ playerStats[player.id].losses }}</td>
-                            <td>{{ playerStats[player.id].draws }}</td>
-                            <td>{{ calculateTotalScore(player.id) }}</td>
+                    <ng-template pTemplate="body" let-player let-i="index"> <!-- Utilise un modèle pour afficher le corps du tableau -->
+                        <tr *ngIf="match"> <!-- Affiche une ligne si un match est disponible -->
+                            <td>{{ getPlayerPosition(player.id, currentRound) }}</td> <!-- Affiche la position du joueur dans le tournoi -->
+                            <td>{{ player.username }}</td> <!-- Affiche le nom du joueur -->
+                            <td>{{ match.result !== 'NotPlayed' ? currentRound : currentRound-1 }}</td> <!-- Affiche le numéro de la ronde actuelle ou précédente -->
+                            <td>{{  playerStats[player.id].wins }}</td> <!-- Affiche le nombre de victoires du joueur -->
+                            <td>{{ playerStats[player.id].losses }}</td> <!-- Affiche le nombre de défaites du joueur -->
+                            <td>{{ playerStats[player.id].draws }}</td> <!-- Affiche le nombre de matchs nuls du joueur -->
+                            <td>{{ calculateTotalScore(player.id) }}</td> <!-- Affiche le score total du joueur -->
                         </tr>
-                        <tr *ngIf="!match && tournament.currentRound < 2">
+                        <tr *ngIf="!match && tournament.currentRound < 2"> <!-- Affiche une ligne si aucun match n'est disponible et que la ronde actuelle est inférieure à 2 -->
                             <td>1</td>
                             <td>{{ player.username }}</td>
                             <td>0</td>
@@ -48,33 +49,33 @@
 
                     </ng-template>
                 </p-table>
-                <ng-template pTemplate="footer">
-                    <p-button routerLink="/tournament/index" label="Retour à l'index"></p-button>
+                <ng-template pTemplate="footer"> <!-- Utilise un modèle pour afficher le pied de page du panneau -->
+                    <p-button routerLink="/tournament/index" label="Retour à l'index"></p-button> <!-- Affiche un bouton pour revenir à l'index des tournois -->
                 </ng-template>
             </p-panel>
             <p-card *ngIf="tournament.matches && tournament.players && tournament.players.length >= 2 && !tournament.canStart" [style]="{width: '50%'}" class="mt-5 flex justify-content-end">
 
-                <div *ngIf="match" class="flex justify-content-between align-items-center">
-                    <p class="w-3">{{ match.whiteName }}</p>
-                    <p class="w-3">VS</p>
-                    <p class="w-3">{{ match.blackName }}</p>
+                <div *ngIf="match" class="flex justify-content-between align-items-center"> <!-- Affiche un conteneur si un match est disponible -->
+                    <p class="w-3">{{ match.whiteName }}</p> <!-- Affiche le nom du joueur blanc -->
+                    <p class="w-3">VS</p> <!-- Affiche le texte "VS" -->
+                    <p class="w-3">{{ match.blackName }}</p> <!-- Affiche le nom du joueur noir -->
 
-                    <form [formGroup]="resultForm">
-                        <p-dropdown class="w-3" *ngIf="tournament.status !== 'Closed'"  [style]="{width: '100%'}"
+                    <form [formGroup]="resultForm"> <!-- Utilise un formulaire avec un groupe de contrôles pour le résultat du match -->
+                        <p-dropdown class="w-3" *ngIf="tournament.status !== 'Closed' && user?.role == 'Admin' "  [style]="{width: '100%'}"
                                     formControlName="result" [options]="matchResults"
                                     [placeholder]="matchResults[0]" (onChange)="resultFormSubmit(match.id)">
-                        </p-dropdown>
+                        </p-dropdown> <!-- Affiche une liste déroulante pour sélectionner le résultat du match -->
                     </form>
 
                 </div>
-                <p-button *ngIf="tournament.status !== 'Closed' && !tournament.canStart"  label="Sauvegarder" (click)="nextRound(tournament.id)"></p-button>
+                <p-button *ngIf="tournament.status !== 'Closed' && !tournament.canStart && user?.role == 'Admin'"  label="Sauvegarder" (click)="nextRound(tournament.id)"></p-button> <!-- Affiche un bouton pour sauvegarder le résultat du match -->
 
             </p-card>
         </div>
 
         <p-button class="" [style]="{marginTop: '15px'}" *ngIf="tournament.players && tournament.canStart && user?.role === 'Admin'" label="Démarrer"
                   [disabled]="tournament.players.length < tournament.minPlayers"
-                  (onClick)="start(tournament.id)"></p-button>
+                  (onClick)="start(tournament.id)"></p-button> <!-- Affiche un bouton pour démarrer le tournoi si les conditions sont remplies -->
     </ng-container>
 
 

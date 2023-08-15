@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {registrationDateValidator} from "../../../shared/validators/registration-date-validator";
-import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
-import {TournamentService} from "../../../shared/services/tournament.service";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { registrationDateValidator } from "../../../shared/validators/registration-date-validator";
+import { TournamentCategory } from "../../../shared/enums/TournamentCategory";
+import { TournamentService } from "../../../shared/services/tournament.service";
 import { Router, RouterLink } from "@angular/router";
-import {animate, style, transition, trigger} from "@angular/animations";
+import { animate, style, transition, trigger } from "@angular/animations";
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -44,17 +44,16 @@ import { ButtonModule } from 'primeng/button';
         InputSwitchModule,
     ],
 })
-export class TournamentAddComponent implements OnInit{
+export class TournamentAddComponent implements OnInit {
 
-    addForm: FormGroup
+    addForm: FormGroup;
 
     tournamentCategories = this.enumToDropdownOptions(TournamentCategory);
-    currentDate: Date = new Date()
+    currentDate: Date = new Date();
 
     animationState: boolean = false;
 
     minDate: Date = this.currentDate;
-
 
     constructor(private _formBuilder: FormBuilder,
                 private _tournamentService: TournamentService,
@@ -97,7 +96,7 @@ export class TournamentAddComponent implements OnInit{
                 Validators.required,
                 registrationDateValidator()
             ]]
-        })
+        });
     }
 
     get categoryFormArray(): FormArray {
@@ -116,10 +115,9 @@ export class TournamentAddComponent implements OnInit{
         }
     }
 
-
     ngOnInit() {
-        this.animationState = true
-        this.currentDate.setDate(this.currentDate.getDate() + 3)
+        this.animationState = true;
+        this.currentDate.setDate(this.currentDate.getDate() + 3);
     }
 
     private enumToDropdownOptions(myEnum: any): any[] {
@@ -128,22 +126,21 @@ export class TournamentAddComponent implements OnInit{
 
     addTournament() {
         if (this.addForm.valid) {
-            console.log(this.addForm.value)
-            const categoriesModified = this.addForm.get('categories')?.value
-            const categoriesName: string[] = []
+            console.log(this.addForm.value);
+            const categoriesModified = this.addForm.get('categories')?.value;
+            const categoriesName: string[] = [];
 
             for (let categoriesModifiedElement of categoriesModified) {
-                categoriesName.push(categoriesModifiedElement.name)
+                categoriesName.push(categoriesModifiedElement.name);
             }
-
 
             // Mettez à jour la valeur du champ endOfRegistrationDate avec la nouvelle date
             this.addForm.patchValue({
                 categories: categoriesName
             });
             this._tournamentService.addTournament(this.addForm.value).subscribe(data => {
-                this._router.navigateByUrl("/tournament/index")
-            })
+                this._router.navigateByUrl("/tournament/index");
+            });
         }
     }
 }

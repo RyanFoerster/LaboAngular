@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {UserGender} from "../../shared/enums/UserGender";
-import {MemberService} from "../../shared/services/member.service";
-import {HttpClient} from "@angular/common/http";
-import {environments} from "../../../environments/environments";
-import {animate, style, transition, trigger} from "@angular/animations";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { UserGender } from "../../shared/enums/UserGender";
+import { MemberService } from "../../shared/services/member.service";
+import { HttpClient } from "@angular/common/http";
+import { environments } from "../../../environments/environments";
+import { animate, style, transition, trigger } from "@angular/animations";
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
-import { NgIf, NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 
@@ -18,13 +18,14 @@ import { CardModule } from 'primeng/card';
     templateUrl: './add-member.component.html',
     styleUrls: ['./add-member.component.scss'],
     animations: [
+        // Définition de l'animation de la page
         trigger('pageAnimation', [
             transition(':enter', [
-                style({ opacity: 0 }),
-                animate('300ms', style({ opacity: 1 })),
+                style({ opacity: 0 }), // Style initial de l'élément : opacité à 0
+                animate('300ms', style({ opacity: 1 })), // Animation de l'opacité à 1 en 300ms
             ]),
             transition(':leave', [
-                animate('300ms', style({ opacity: 0 })),
+                animate('300ms', style({ opacity: 0 })), // Animation de l'opacité à 0 en 300ms lors de la sortie
             ]),
         ]),
     ],
@@ -44,17 +45,18 @@ import { CardModule } from 'primeng/card';
 })
 export class AddMemberComponent implements OnInit {
 
-    addMemberForm: FormGroup
-    maxDate: Date = new Date()
-    genders = this.enumToDropdownOptions(UserGender)
-    isEmailAvailable!: boolean
-    isUsernameAvailable!: boolean
-    animationState: boolean = false
+    addMemberForm: FormGroup;
+    maxDate: Date = new Date();
+    genders = this.enumToDropdownOptions(UserGender);
+    isEmailAvailable!: boolean;
+    isUsernameAvailable!: boolean;
+    animationState: boolean = false;
 
     constructor(private _formBuilder: FormBuilder,
                 private _memberService: MemberService,
                 private _httpClient: HttpClient) {
 
+        // Crée le formulaire d'ajout de membre avec les validateurs requis
         this.addMemberForm = this._formBuilder.group({
             username: [null, [
                 Validators.required,
@@ -74,24 +76,27 @@ export class AddMemberComponent implements OnInit {
                 Validators.min(0)
             ]],
             gender: [null, [Validators.required]]
-        })
+        });
 
     }
 
     ngOnInit() {
-        this.animationState = true
+        this.animationState = true; // Active l'état d'animation lors de l'initialisation du composant
     }
 
+    // Convertit une énumération en options de liste déroulante
     private enumToDropdownOptions(myEnum: any): any[] {
-        return Object.keys(myEnum).map((key) => ({name: myEnum[key], value: key}));
+        return Object.keys(myEnum).map((key) => ({ name: myEnum[key], value: key }));
     }
 
+    // Méthode appelée lors de l'ajout d'un membre
     addMember() {
         if (this.addMemberForm.valid) {
-            this._memberService.addMember(this.addMemberForm.value).subscribe()
+            this._memberService.addMember(this.addMemberForm.value).subscribe();
         }
     }
 
+    // Vérifie la disponibilité de l'adresse e-mail
     checkEmailAvailability() {
         const email = this.addMemberForm.get('email')?.value;
 
@@ -109,6 +114,7 @@ export class AddMemberComponent implements OnInit {
         }
     }
 
+    // Vérifie la disponibilité du nom d'utilisateur
     checkUsernameAvailability() {
         const username = this.addMemberForm.get('username')?.value;
 

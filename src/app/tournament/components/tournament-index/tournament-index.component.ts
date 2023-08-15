@@ -9,7 +9,7 @@ import {SessionService} from "../../../shared/services/session.service";
 import {User} from "../../../shared/models/User";
 import {animate, style, transition, trigger} from "@angular/animations";
 import {Router, RouterLink} from "@angular/router";
-import {TableLazyLoadEvent, TableModule, TablePageEvent} from "primeng/table";
+import {TableModule} from "primeng/table";
 import {SharedModule} from 'primeng/api';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {InputSwitchModule} from 'primeng/inputswitch';

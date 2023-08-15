@@ -1,15 +1,12 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-
-import { importProvidersFrom } from '@angular/core';
-import { AppComponent } from './app/app.component';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { AuthService } from './app/shared/services/auth.service';
-import { provideRouter, Routes } from '@angular/router';
-import { SessionService } from './app/shared/services/session.service';
-import { JwtInterceptor } from './app/interceptors/jwt.interceptor';
-import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
+import {importProvidersFrom} from '@angular/core';
+import {AppComponent} from './app/app.component';
+import {provideAnimations} from '@angular/platform-browser/animations';
+import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
+import {AuthService} from './app/shared/services/auth.service';
+import {provideRouter, Routes} from '@angular/router';
+import {SessionService} from './app/shared/services/session.service';
+import {JwtInterceptor} from './app/interceptors/jwt.interceptor';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 
 const routes: Routes = [
     {

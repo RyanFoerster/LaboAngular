@@ -1,26 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {TournamentService} from "../../../shared/services/tournament.service";
 import {TournamentDetails} from "../../../shared/models/TournamentDetails";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import {delay, Observable, startWith, take, tap} from "rxjs";
+import {ActivatedRoute, RouterLink} from "@angular/router";
+import {delay, Observable, tap} from "rxjs";
 import {Match} from "../../../shared/models/Match";
-import { MenuItem, SharedModule } from "primeng/api";
+import {MenuItem, SharedModule} from "primeng/api";
 import {animate, style, transition, trigger} from "@angular/animations";
 import {MatchService} from "../../../shared/services/match.service";
 import {MatchResult} from "../../../shared/enums/MatchResult";
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {User} from "../../../shared/models/User";
 import {SessionService} from "../../../shared/services/session.service";
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { PanelModule } from 'primeng/panel';
-import { StepsModule } from 'primeng/steps';
-import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { NgIf, AsyncPipe } from '@angular/common';
+import {DropdownModule} from 'primeng/dropdown';
+import {ButtonModule} from 'primeng/button';
+import {TableModule} from 'primeng/table';
+import {PanelModule} from 'primeng/panel';
+import {StepsModule} from 'primeng/steps';
+import {CardModule} from 'primeng/card';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {AsyncPipe, NgIf} from '@angular/common';
 import {Title} from "@angular/platform-browser";
-import {Tournament} from "../../../shared/models/Tournament";
 
 @Component({
     selector: 'app-tournament-details',
@@ -56,21 +55,21 @@ import {Tournament} from "../../../shared/models/Tournament";
 })
 export class TournamentDetailsComponent implements OnInit {
 
-    tournamentSub!: Observable<TournamentDetails>
-    matches?: Match[];
-    activeIndex: number = 0
-    tournamentItems: MenuItem[] | undefined = []
-    match!: Match
-    currentRound: number = 1
-    animationState: boolean = false;
-    matchResults: string[] = Object.values(MatchResult)
-    user!: User | undefined;
+    tournamentSub!: Observable<TournamentDetails>  // Observable pour récupérer les détails d'un tournoi
+    matches?: Match[];   // Tableau de matchs
+    activeIndex: number = 0 // Index actif
+    tournamentItems: MenuItem[] | undefined = [] // Éléments du menu du tournoi
+    match!: Match  // Match actuel
+    currentRound: number = 1 // Ronde actuelle
+    animationState: boolean = false; // État de l'animation
+    matchResults: string[] = Object.values(MatchResult) // Résultats possibles d'un match
+    user!: User | undefined; // Utilisateur connecté
 
-    resultForm: FormGroup
+    resultForm: FormGroup // Formulaire pour le résultat d'un match
 
-    showSpinner: boolean = false
+    showSpinner: boolean = false // Afficher ou non le spinner de chargement
 
-    playerStats: { [playerId: string]: { wins: number; losses: number; draws: number } } = {}
+    playerStats: { [playerId: string]: { wins: number; losses: number; draws: number } } = {} // Statistiques des joueurs
 
     constructor(private _tournamentService: TournamentService,
                 private _activatedRoute: ActivatedRoute,
@@ -86,19 +85,6 @@ export class TournamentDetailsComponent implements OnInit {
         if(this._sessionService.getToken()){
             this.user = this._sessionService.getToken()?.user
         }
-    }
-
-    initTitle(tournament: TournamentDetails | undefined){
-        if(!tournament){
-            this._title.setTitle('Tournament not found')
-            return
-        }
-
-        if (tournament.name != null) {
-            this._title.setTitle(tournament.name)
-        }
-
-
     }
 
     ngOnInit() {
@@ -131,6 +117,17 @@ export class TournamentDetailsComponent implements OnInit {
 
             })
         )
+    }
+
+    initTitle(tournament: TournamentDetails | undefined){
+        if(!tournament){
+            this._title.setTitle('Tournament not found')
+            return
+        }
+
+        if (tournament.name != null) {
+            this._title.setTitle(tournament.name)
+        }
     }
 
     calculatePlayerPositions(round: number): { playerId: string; position: number }[] {
@@ -229,25 +226,25 @@ export class TournamentDetailsComponent implements OnInit {
         ).subscribe()
     }
 
-    calculateTotalScore(playerId: string): number {
-        const stats = this.playerStats[playerId];
-        if (!stats) {
+    calculateTotalScore(playerId: string): number { // Calcule le score total d'un joueur
+        const stats = this.playerStats[playerId]; // Récupère les statistiques du joueur
+        if (!stats) { // Si les statistiques sont indisponibles, retourne 0
             return 0;
         }
 
-        const wins = stats.wins;
-        const losses = stats.losses;
-        const draws = stats.draws;
+        const wins = stats.wins; // Nombre de victoires
+        const losses = stats.losses; // Nombre de défaites
+        const draws = stats.draws; // Nombre de matchs nuls
 
-        let totalScore = wins - losses + (draws * 0.5);
+        let totalScore = wins - losses + (draws * 0.5); // Calcul du score total (victoires - défaites + matchs nuls * 0.5)
 
-        totalScore = Math.max(totalScore, 0);
+        totalScore = Math.max(totalScore, 0); // Le score total ne peut pas être négatif
 
-        if (totalScore === 0 && draws > 0) {
+        if (totalScore === 0 && draws > 0) { // Si le score total est 0 mais qu'il y a des matchs nuls, retourne 0.5
             return 0.5;
         }
 
-        return totalScore;
+        return totalScore; // Retourne le score total
     }
 
     resultFormSubmit(matchId: number) {
@@ -262,7 +259,6 @@ export class TournamentDetailsComponent implements OnInit {
                         tournamentId,
                         round: this.currentRound
                     }).subscribe(data => {
-                        console.log(data)
                         this.match = data[0]
                     })
                 }
