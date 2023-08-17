@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TournamentService} from "../../../shared/services/tournament.service";
-import {delay, Observable, tap} from "rxjs";
+import {delay, first, Observable, of, tap} from "rxjs";
 import {TournamentStatus} from "../../../shared/enums/TournamentStatus";
 import {TournamentIndex} from "../../../shared/models/TournamentIndex";
 import {TournamentCategory} from "../../../shared/enums/TournamentCategory";
@@ -71,6 +71,9 @@ export class TournamentIndexComponent implements OnInit {
     user?: User
 
     totalRecords: number = 10
+
+    first: number = 0
+    rows: number = 10
 
 
     constructor(private _tournamentService: TournamentService,
@@ -184,6 +187,11 @@ export class TournamentIndexComponent implements OnInit {
 
     onPagesChange($event: PaginatorState) {
         const offset = $event.first
+        //@ts-ignore
+        this.first = offset
+        //@ts-ignore
+        this.rows = $event.rows
+
 
         this.tournamentsSub$ = this._tournamentService.getTournaments({
             offset,

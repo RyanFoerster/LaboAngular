@@ -52,8 +52,8 @@
     </div>
     <p-progressSpinner *ngIf="showSpinner" class="flex justify-content-center align-items-center"></p-progressSpinner>
     <ng-container *ngIf="tournamentsSub$ | async as tournaments">
+        <p-paginator [first]="first" [rows]="rows" [totalRecords]="tournaments.total" (onPageChange)="onPagesChange($event)"></p-paginator>
         <div *ngIf="!showSpinner">
-            <p-paginator [rows]="10" [totalRecords]="tournaments.total" (onPageChange)="onPagesChange($event)"></p-paginator>
 
             <p-table [tableStyle]="{ 'min-width': '50rem' }"
                      *ngIf="tournaments.results"
